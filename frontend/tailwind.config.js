@@ -37,7 +37,11 @@ module.exports = {
         'giant': ['16rem', { lineHeight: '0.75', letterSpacing: '-0.02em' }],
       },
       screens: {
-        xs: '480px',
+         'sm': '640px',
+         'md': '768px',
+         'lg': '1024px',
+         'xl': '1280px',
+         '2xl': '1536px',
       },
       borderWidth: {
         3: '3px',

@@ -89,8 +89,12 @@ const Header = () => {
               </Button>
             ))}
           </Box>
-          <Button variant="text" class="pr-8">Signup</Button>
-          <Button variant="outlined">Login</Button>
+          <a href="/signup">
+            <Button variant="text" class="pr-8">Signup</Button>
+          </a>
+          <a href="/login">
+            <Button variant="outlined">Login</Button>
+          </a>
           <Box sx={{ flexGrow: 0 }} class="pl-8">
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>

@@ -22,20 +22,20 @@ const LandingPage = () => {
         <Carousel.Item style={{minHeight: "93vh"}}>
           <div class="pt-24 grid grid-cols-2 h-full">
             <div >
-              <img src={logo}  />
+              <img src={logo} class="sm:w-30"/>
             </div>
             <div>
-              <div class="text-white text-giant pt-14 font-sans font-medium">
+              <div class="text-white pt-14 font-sans font-medium lg:text-giant md:text-6xl">
                 <div>book</div><div>it</div>
               </div>
-              <div class="text-white text-5xl pt-2 font-mono leading-9">
+              <div class="text-white pt-2 font-mono leading-9 lg:text-5xl md:text-2xl">
                 <div>a book</div><div>recommendation</div><div>app.</div>
               </div>
             </div>
           </div>
         </Carousel.Item>
         <Carousel.Item style={{minHeight: "93vh"}}>
-          <div class="pt-52 flex items-center justify-center align-middle">
+          <div class="lg:pt-52 sm:pt-36 flex items-center justify-center align-middle">
             <Card variant="outlined" sx={{ width: "75%" }}>
               <div class="pl-8">
                 <CardContent>
@@ -57,7 +57,7 @@ const LandingPage = () => {
           </div>
         </Carousel.Item>
         <Carousel.Item style={{minHeight: "93vh"}}>
-        <div class="pt-52 flex items-center justify-center align-middle">
+        <div class="lg:pt-52 sm:pt-36 flex items-center justify-center align-middle">
           <div class="grid grid-cols-2">
             <div class="pr-4">
               <Card variant="outlined">
@@ -65,7 +65,9 @@ const LandingPage = () => {
                   <div class="font-mono pt-8 text-3xl text-center">Ready to discover new reads?</div>
                   <div class="font-mono pt-8 text-2xl text-center">Create a bookit account now!</div>
                   <div class="pt-24 text-center">
-                    <Button variant="contained" size="large">Create an Account</Button>
+                    <a href="/signup">
+                      <Button variant="contained" size="large">Create an Account</Button>
+                    </a>
                   </div>
                 </CardContent>
               </Card>
@@ -76,7 +78,9 @@ const LandingPage = () => {
                 <div class="font-mono pt-8 text-3xl text-center">Already have an account?</div>
                 <div class="font-mono pt-8 text-2xl text-center">Login here!</div>
                 <div class="pt-24 text-center">
-                  <Button variant="contained" size="large">Login</Button>
+                  <a href="/login">
+                    <Button variant="contained" size="large">Login</Button>
+                  </a>
                 </div>
                 </CardContent>
               </Card>
