@@ -1,5 +1,4 @@
 import Container from '@mui/material/Container';
-import Divider from '@mui/material/Divider';
 
  const MainScreen = ({title, children}) => {
    return (

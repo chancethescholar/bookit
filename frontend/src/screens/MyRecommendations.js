@@ -1,26 +1,25 @@
 import * as React from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import MainScreen from "../components/MainScreen";
 import Button from '@mui/material/Button';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
-import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
-import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
 import Chip from '@mui/material/Chip';
-import { styled } from '@mui/material/styles';
 import image from '../images/no-image.png';
-import recommendations from '../data/recommendations';
+import axios from 'axios';
 
 const MyRecommendations = () => {
+const [recommendations, setRecommendations] = useState([]);
+
   const deleteHandler = (id) =>
   {
     if(window.confirm("Are you sure you want to delete this recommendation?"))
@@ -29,11 +28,16 @@ const MyRecommendations = () => {
     }
   };
 
-  const [expanded, setExpanded] = React.useState(false);
+  const fetchRecommendations = async() => {
+    const { data } = await axios.get("/api/recommendations");
+    setRecommendations(data);
+  }
 
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
-  };
+  console.log(recommendations);
+
+  useEffect(() => {
+    fetchRecommendations();
+  }, [])
 
   return (
     <MainScreen title="My Recommendations">
@@ -48,7 +52,7 @@ const MyRecommendations = () => {
       {
         recommendations.map(recommendation => (
           <div class="pb-4">
-            <Card sx={{ maxWidth: 345 }}>
+            <Card sx={{ maxWidth: 345 }} key={recommendation._id}>
               <CardHeader
                 title={recommendation.title}
                 subheader={recommendation.author}
@@ -60,10 +64,10 @@ const MyRecommendations = () => {
                 alt={recommendation.title}
               />
               <CardContent>
-              <div class="pb-4 pr-2">
+              <div class="pb-4">
               {
                 recommendation.genres.map(genre => (
-                  <Chip variant="outlined" color="primary" label={genre}/>
+                  <Chip key=<React.Fragment>{recommendation._id}{genre}</React.Fragment> variant="outlined" color="primary" label={genre}/>
                   ))
               }
               </div>
