@@ -11,10 +11,8 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import logo from "../../images/logo.png";
 
 const pages = ['Home', 'About'];
-const settings = ['Signup', 'Login'];
 const profiles = ['Profile', 'My Recommendations', 'Logout'];
 
 

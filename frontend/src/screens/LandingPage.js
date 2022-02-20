@@ -3,12 +3,9 @@ import * as React from 'react';
 import { useState } from 'react';
 import Carousel from 'react-bootstrap/Carousel';
 import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import Container from '@mui/material/Container';
-import Box from '@mui/material/Box';
 
 const LandingPage = () => {
   const [index, setIndex] = useState(0);
@@ -22,7 +19,7 @@ const LandingPage = () => {
         <Carousel.Item style={{minHeight: "93vh"}}>
           <div class="pt-24 grid grid-cols-2 h-full">
             <div >
-              <img src={logo} class="sm:w-30"/>
+              <img src={logo} alt="Logo" class="sm:w-30"/>
             </div>
             <div>
               <div class="text-white pt-14 font-sans font-medium lg:text-giant md:text-6xl">
