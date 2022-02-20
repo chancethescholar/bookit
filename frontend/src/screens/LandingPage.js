@@ -16,6 +16,7 @@ const LandingPage = () => {
   return(
     <main style={{minHeight: "93vh"}}>
       <Carousel activeIndex={index} onSelect={handleSelect}>
+        {/*title page*/}
         <Carousel.Item style={{minHeight: "93vh"}}>
           <div class="pt-24 grid grid-cols-2 h-full">
             <div >
@@ -31,7 +32,8 @@ const LandingPage = () => {
             </div>
           </div>
         </Carousel.Item>
-        <Carousel.Item style={{minHeight: "93vh"}}>
+        {/*about page*/}
+        <Carousel.Item style={{minHeight: "93vh"}} id="about">
           <div class="lg:pt-52 sm:pt-36 flex items-center justify-center align-middle">
             <Card variant="outlined" sx={{ width: "75%" }}>
               <div class="pl-8">
@@ -53,6 +55,7 @@ const LandingPage = () => {
             </Card>
           </div>
         </Carousel.Item>
+        {/*signup and login page*/}
         <Carousel.Item style={{minHeight: "93vh"}}>
         <div class="lg:pt-52 sm:pt-36 flex items-center justify-center align-middle">
           <div class="grid grid-cols-2">

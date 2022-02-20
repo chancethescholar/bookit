@@ -11,9 +11,20 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
+import { Link } from 'react-router-dom';
 
-const pages = ['Home', 'About'];
-const profiles = ['Profile', 'My Recommendations', 'Logout'];
+const pages = [
+  {
+    title: 'Home',
+    link: '/',
+  },
+  {
+    title: 'MyRecommendations',
+    link: '/myrecommendations',
+  }
+]
+//const pages = ['Home', 'About'];
+const profiles = ['Profile', 'Logout'];
 
 
 const Header = () => {
@@ -70,29 +81,33 @@ const Header = () => {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
+                <Link to={page.link} style={{ textDecoration: 'none' }}>
+                  <MenuItem key={page.title} onClick={handleCloseNavMenu}>
+                    <div class="text-black hover:text-cobalt">{page.title}</div>
+                  </MenuItem>
+                </Link>
               ))}
             </Menu>
           </Box>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
               <Button
-                key={page}
+                key={page.title}
                 onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
-                {page}
+                {page.title}
               </Button>
             ))}
           </Box>
-          <a href="/signup">
-            <Button variant="text" class="pr-8">Signup</Button>
-          </a>
-          <a href="/login">
+          <Link to="/signup" style={{ textDecoration: 'none'}}>
+            <div class="pr-8">
+              <Button variant="text">Signup</Button>
+            </div>
+          </Link>
+          <Link to="/login" style={{ textDecoration: 'none' }}>
             <Button variant="outlined">Login</Button>
-          </a>
+          </Link>
           <Box sx={{ flexGrow: 0 }} class="pl-8">
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
