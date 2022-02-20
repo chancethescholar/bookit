@@ -29,7 +29,7 @@ const registerUser = asyncHandler(async (req, res) => {
       email: user.email,
       isAdmin: user.isAdmin,
       pic: user.pic,
-    })
+    });
   }
   else {
     {
@@ -39,4 +39,25 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { registerUser }
+const authUser = asyncHandler(async (req, res) => {
+  const { usernameOrEmail, password } = req.body;
+
+  const user = await User.findOne({ usernameOrEmail });
+
+  if(user && (await user.matchPassword(password))) {
+    res.json({
+      _id: user._id,
+      username: user.username,
+      email: user.email,
+      isAdmin: user.isAdmin,
+      pic: user.pic,
+    });
+  }
+  else {
+    res.status(400);
+    throw new Error("Invalid login credentials.");
+  }
+});
+
+
+module.exports = { registerUser, authUser }
