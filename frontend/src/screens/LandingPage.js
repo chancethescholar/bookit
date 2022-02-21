@@ -14,7 +14,7 @@ const LandingPage = () => {
   };
 
   return(
-    <main style={{minHeight: "93vh"}}>
+    <main class="bg-black" style={{minHeight: "93vh"}}>
       <Carousel activeIndex={index} onSelect={handleSelect}>
         {/*title page*/}
         <Carousel.Item style={{minHeight: "93vh"}}>
