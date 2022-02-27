@@ -1,13 +1,21 @@
 import logo from "../images/logo-home.png";
 import * as React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Carousel from 'react-bootstrap/Carousel';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 
-const LandingPage = () => {
+const LandingPage = ({history}) => {
+  useEffect(() => {
+    const userInfo = localStorage.getItem("userInfo");
+
+    if(userInfo) {
+      history.push("/myrecommendations");
+    }
+  }, [history]);
+
   const [index, setIndex] = useState(0);
   const handleSelect = (selectedIndex, e) => {
     setIndex(selectedIndex);

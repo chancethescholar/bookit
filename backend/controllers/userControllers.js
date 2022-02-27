@@ -4,7 +4,11 @@ const nodemailer = require("nodemailer");
 const generateToken = require('../utils/generateToken');
 
 const registerUser = asyncHandler(async (req, res) => {
-  const { username, email, password, isAdmin, pic} = req.body;
+  let hasUpperCase = false;
+  let hasLowerCase = false;
+  let hasNumber = false;
+
+  const { username, email, password, confirmPassword, isAdmin, pic} = req.body;
 
   const usernameExists = await User.findOne({username});
   const emailExists = await User.findOne({email});
@@ -17,6 +21,51 @@ const registerUser = asyncHandler(async (req, res) => {
   if(emailExists) {
     res.status(400);
     throw new Error("Email already in use. Please login or choose a different email.");
+  }
+
+  if(password != confirmPassword) {
+    res.status(400);
+    throw new Error("Passwords do not match.");
+  }
+
+  if(password.length < 8)
+  {
+    res.status(400);
+    throw new Error("Password must be at least 8 characters.");
+  }
+
+  for(let i = 0; i < password.length; i++)
+  {
+    if(isUpperCase(password.charAt(i)))
+    {
+      hasUpperCase = true;
+    }
+    if(isLowerCase(password.charAt(i)))
+    {
+      hasLowerCase = true;
+    }
+    if(password.charAt(i) >= '0' && password.charAt(i) <= '9')
+    {
+      hasNumber = true;
+    }
+  }
+
+  if(!hasUpperCase)
+  {
+    res.status(400);
+    throw new Error("Password must contain at least one uppercase letter.");
+  }
+
+  if(!hasLowerCase)
+  {
+    res.status(400);
+    throw new Error("Password must contain at least one lowercase letter.");
+  }
+
+  if(!hasNumber)
+  {
+    res.status(400);
+    throw new Error("Password must contain at least one number.");
   }
 
   const user = await User.create({
@@ -100,5 +149,14 @@ const authUser = asyncHandler(async (req, res) => {
   }
 });
 
+
+
+function isUpperCase(str) {
+    return !/[a-z]/.test(str) && /[A-Z]/.test(str);
+}
+
+function isLowerCase(str) {
+    return (/[a-z]/.test(str));
+}
 
 module.exports = { registerUser, authUser }

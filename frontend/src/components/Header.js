@@ -11,7 +11,7 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const pages = [
   {
@@ -19,15 +19,14 @@ const pages = [
     link: '/',
   },
   {
-    title: 'MyRecommendations',
+    title: 'My Recommendations',
     link: '/myrecommendations',
   }
-]
-//const pages = ['Home', 'About'];
-const profiles = ['Profile', 'Logout'];
-
+];
 
 const Header = () => {
+  const navigate = useNavigate();
+
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -47,7 +46,6 @@ const Header = () => {
   };
 
   return (
-
     <AppBar position="static" class="bg-white">
       <Container maxWidth="3xl">
         <Toolbar disableGutters>
@@ -130,11 +128,15 @@ const Header = () => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {profiles.map((profile) => (
-                <MenuItem key={profile} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{profile}</Typography>
-                </MenuItem>
-              ))}
+              <MenuItem key="Profile" onClick={handleCloseUserMenu}>
+                <Typography textAlign="center">Profile</Typography>
+              </MenuItem>
+              <MenuItem key="Logout" onClick={() => {
+                localStorage.removeItem("userInfo");
+                navigate("/");
+            }}>
+                <Typography textAlign="center">Logout</Typography>
+              </MenuItem>
             </Menu>
           </Box>
         </Toolbar>

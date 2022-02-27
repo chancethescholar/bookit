@@ -1,10 +1,7 @@
 import * as React from 'react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import MainScreen from "../components/MainScreen";
-import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
-import Input from '@mui/material/Input';
-import FilledInput from '@mui/material/FilledInput';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -13,25 +10,16 @@ import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import Button from '@mui/material/Button';
 import axios from 'axios';
 import LoadingButton from '@mui/lab/LoadingButton';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 
-const LoginScreen = ({history}) => {
+const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
-
-  /*useEffect(() => {
-    const userInfo = localStorage.getItem("userInfo");
-
-    if(userInfo) {
-      history.push("/myrecommendations");
-    }
-  }, [history]);*/
 
   const [values, setValues] = useState({
     amount: '',
@@ -76,11 +64,11 @@ const LoginScreen = ({history}) => {
       );
 
       setLoading(false);
-      localStorage.setItem('userInfo', JSON.stringify(data))
+      localStorage.setItem('userInfo', JSON.stringify(data));
     }
-    catch {
+    catch (error) {
       setError(true);
-      setErrorMessage("Incorrect username/email or password.");
+      setErrorMessage(error.response.data.message);
       setLoading(false);
     }
   };
@@ -138,7 +126,7 @@ const LoginScreen = ({history}) => {
               variant="contained"
               color="primary"
             >
-              Submit
+              Login
             </LoadingButton>
           </div>
         </form>
