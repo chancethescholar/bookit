@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import MainScreen from "../components/MainScreen";
 import IconButton from '@mui/material/IconButton';
 import OutlinedInput from '@mui/material/OutlinedInput';
@@ -10,9 +10,12 @@ import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import axios from 'axios';
 import LoadingButton from '@mui/lab/LoadingButton';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import { signup } from "../actions/userActions";
+import { userSignupReducer } from "../reducers/userReducers";
+import { useDispatch, useSelector} from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const SignupScreen = () => {
   const [username, setUsername] = useState("");
@@ -22,9 +25,6 @@ const SignupScreen = () => {
   );
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
-  const [loading, setLoading] = useState(false);
   const [picMessage, setPicMessage] = useState(null);
 
   const [values, setValues] = useState({
@@ -69,34 +69,20 @@ const SignupScreen = () => {
     event.preventDefault();
   };
 
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const userSignup = useSelector((state) => state.userSignup);
+  const { loading, error, userInfo } = userSignup;
+
+  useEffect(() => {
+    if(userInfo) {
+      navigate("/myrecommendations");
+  }
+}, [navigate, userInfo]);
+
   const submitHandler = async (e) => {
     e.preventDefault();
-    try {
-      const config = {
-        headers: {
-          "Content-type": "application/json"
-        },
-      };
-      setLoading(true);
-      const { data } = await axios.post(
-        "/api/users",
-        {
-          username,
-          email,
-          password,
-          confirmPassword,
-        },
-        config
-      );
-
-      setLoading(false);
-      localStorage.setItem('userInfo', JSON.stringify(data));
-    }
-    catch (error){
-      setError(true);
-      setErrorMessage(error.response.data.message);
-      setLoading(false);
-    }
+    dispatch(signup(username, email, password, confirmPassword));
   };
 
   return(
@@ -178,7 +164,7 @@ const SignupScreen = () => {
             {error &&
             <FormHelperText class="text-red-600 text-xs pl-2">
               <span class="pr-2"><ErrorOutlineIcon color="error"/></span>
-              {errorMessage}
+              {error}
             </FormHelperText>}
           </div>
           <div class="pl-2 pt-4">

@@ -12,6 +12,8 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector} from "react-redux";
+import { logout } from "../actions/userActions";
 
 const pages = [
   {
@@ -26,6 +28,14 @@ const pages = [
 
 const Header = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
+
+  const logoutHandler = () => {
+    dispatch(logout());
+    navigate("/");
+  }
 
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -44,6 +54,8 @@ const Header = () => {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+
 
   return (
     <AppBar position="static" class="bg-white">
@@ -131,10 +143,7 @@ const Header = () => {
               <MenuItem key="Profile" onClick={handleCloseUserMenu}>
                 <Typography textAlign="center">Profile</Typography>
               </MenuItem>
-              <MenuItem key="Logout" onClick={() => {
-                localStorage.removeItem("userInfo");
-                navigate("/");
-            }}>
+              <MenuItem key="Logout" onClick={logoutHandler}>
                 <Typography textAlign="center">Logout</Typography>
               </MenuItem>
             </Menu>
