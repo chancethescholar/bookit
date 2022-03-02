@@ -1,8 +1,8 @@
 const express = require('express');
-const recommendations = require('./data/recommendations');
 const dotenv = require('dotenv');
 const connectDB = require("./config/db");
 const userRoutes = require('./routes/userRoutes');
+const recommendationRoutes = require('./routes/recommendationRoutes');
 const { notFound, errorHandler } = require('./middlewares/errorMiddleware');
 
 const app = express();
@@ -14,11 +14,8 @@ app.get('/', (req, res) => {
   res.send("API is running..");
 });
 
-app.get('/api/recommendations', (req, res) => {
-  res.json(recommendations);
-})
-
 app.use('/api/users', userRoutes);
+app.use('/api/recommendations', recommendationRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
