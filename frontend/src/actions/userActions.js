@@ -12,7 +12,7 @@ import axios from 'axios';
 
 export const login = (email, password) => async (dispatch) => {
   try {
-    dispatch({ type: USER_LOGIN_REQUEST});
+    dispatch({ type: USER_LOGIN_REQUEST });
 
     const config = {
       headers: {
@@ -48,7 +48,7 @@ export const logout = () => async (dispatch) => {
   dispatch({ type: USER_LOGOUT });
 }
 
-export const signup = (username, email, password, confirmPassword) => async (dispatch) => {
+export const signup = (username, email, password, confirmPassword, pic) => async (dispatch) => {
   try {
     dispatch({ type: USER_SIGNUP_REQUEST });
 
@@ -65,6 +65,7 @@ export const signup = (username, email, password, confirmPassword) => async (dis
         email,
         password,
         confirmPassword,
+        pic
       },
       config
     );

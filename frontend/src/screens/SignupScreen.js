@@ -12,8 +12,8 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import LoadingButton from '@mui/lab/LoadingButton';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import Typography from '@mui/material/Typography';
 import { signup } from "../actions/userActions";
-import { userSignupReducer } from "../reducers/userReducers";
 import { useDispatch, useSelector} from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -21,7 +21,7 @@ const SignupScreen = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [pic, setPic] = useState(
-    "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg"
+    "/static/images/avatar/2.jpg"
   );
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -74,16 +74,43 @@ const SignupScreen = () => {
   const userSignup = useSelector((state) => state.userSignup);
   const { loading, error, userInfo } = userSignup;
 
-  useEffect(() => {
-    if(userInfo) {
-      navigate("/myrecommendations");
-  }
-}, [navigate, userInfo]);
-
   const submitHandler = async (e) => {
     e.preventDefault();
-    dispatch(signup(username, email, password, confirmPassword));
+    dispatch(signup(username, email, password, confirmPassword, pic));
   };
+
+  const postDetails = (pics) => {
+    setPicMessage(null);
+
+    if(pics.type === 'image/jpeg' || pics.type === 'image/png') {
+      const data = new FormData();
+      data.append('file', pics);
+      data.append('upload_preset', 'bookit');
+      data.append('cloud_name', 'ddn6ap5nl')
+      fetch("https://api.cloudinary.com/v1_1/ddn6ap5nl/image/upload", {
+        method: "post",
+        body: data,
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          setPic(data.url.toString());
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+    }
+
+    else {
+      return setPicMessage("Image must be a jpeg or png.");
+    }
+  }
+
+  useEffect(() => {
+    if(userInfo) {
+      navigate("/");
+    }
+  }, [navigate, userInfo]);
 
   return(
     <MainScreen title="Signup">
@@ -158,6 +185,20 @@ const SignupScreen = () => {
                   }
                   label="Confirm Password"
                 />
+              </FormControl>
+            </div>
+            {picMessage &&
+            <div class="text-red-600 text-lg pl-2">
+              <span class="pr-2"><ErrorOutlineIcon color="error"/></span>
+              {picMessage}
+            </div>
+            }
+            <div>
+              <FormControl sx={{ m: 1, width: '100%'}} variant="outlined">
+                <Typography className="pl-2" component="legend">Upload profile picture</Typography>
+                <label>
+                  <input className="pl-2 pt-2" type="file" name="image" onChange={(e) => postDetails(e.target.files[0])}/>
+                </label>
               </FormControl>
             </div>
           <div>

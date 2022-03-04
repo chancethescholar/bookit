@@ -8,7 +8,7 @@ const registerUser = asyncHandler(async (req, res) => {
   let hasLowerCase = false;
   let hasNumber = false;
 
-  const { username, email, password, confirmPassword, isAdmin, pic} = req.body;
+  const { username, email, password, confirmPassword, isAdmin, pic } = req.body;
 
   const usernameExists = await User.findOne({username});
   const emailExists = await User.findOne({email});
@@ -134,7 +134,7 @@ const authUser = asyncHandler(async (req, res) => {
   if (user && (await user.matchPassword(password))) {
     res.json({
       _id: user._id,
-      name: user.name,
+      username: user.username,
       email: user.email,
       isAdmin: user.isAdmin,
       pic: user.pic,

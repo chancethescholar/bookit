@@ -5,6 +5,8 @@ import LandingPage from "./screens/LandingPage";
 import MyRecommendations from "./screens/MyRecommendations";
 import LoginScreen from "./screens/LoginScreen";
 import SignupScreen from "./screens/SignupScreen";
+import CreateRecommendation from "./screens/CreateRecommendation";
+import EditRecommendation from "./screens/EditRecommendation";
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -21,6 +23,9 @@ const theme = createTheme({
     },
     error: {
       main: '#ff0033'
+    },
+    info: {
+      main: '#000000'
     }
   },
 });
@@ -34,6 +39,8 @@ const App = () => (
             <Route path='/myrecommendations' element={<MyRecommendations />} exact/>
             <Route path='/login' element={<LoginScreen />} exact/>
             <Route path='/signup' element={<SignupScreen />} exact/>
+            <Route path='/createrecommendation' element={<CreateRecommendation />} exact/>
+            <Route path='/recommendation/:id' element={<EditRecommendation />} exact/>
           </Routes>
         <Footer />
     </Router>
