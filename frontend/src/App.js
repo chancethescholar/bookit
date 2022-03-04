@@ -1,4 +1,5 @@
 import './App.css';
+import { useState } from 'react';
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import LandingPage from "./screens/LandingPage";
@@ -30,13 +31,16 @@ const theme = createTheme({
   },
 });
 
-const App = () => (
+const App = () => {
+  const [search, setSearch] = useState("");
+  console.log(search);
+  return (
   <ThemeProvider theme={theme}>
     <Router>
-        <Header />
+        <Header setSearch={setSearch}/>
           <Routes>
             <Route path="/" element={<LandingPage />} exact/>
-            <Route path='/myrecommendations' element={<MyRecommendations />} exact/>
+            <Route path='/myrecommendations' element={<MyRecommendations search={ search }/>} exact/>
             <Route path='/login' element={<LoginScreen />} exact/>
             <Route path='/signup' element={<SignupScreen />} exact/>
             <Route path='/createrecommendation' element={<CreateRecommendation />} exact/>
@@ -45,6 +49,6 @@ const App = () => (
         <Footer />
     </Router>
   </ThemeProvider>
-)
+)}
 
 export default App;

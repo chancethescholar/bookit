@@ -25,7 +25,7 @@ import image from '../images/no-image.png';
 import { useDispatch, useSelector} from "react-redux";
 import { listRecommendations, deleteRecommendationAction } from "../actions/recommendationsActions";
 
-const MyRecommendations = () => {
+const MyRecommendations = ({ search }) => {
   const StyledRating = styled(Rating)({
     '& .MuiRating-iconFilled': {
       color: '#ff6d75',
@@ -60,7 +60,7 @@ const MyRecommendations = () => {
       }
     };
 
-    console.log(recommendations);
+    //console.log(recommendations);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -71,28 +71,28 @@ const MyRecommendations = () => {
 
     return (
       <MainScreen title={`${userInfo.username}'s Recommendations`}>
-        <div class="pb-4">
+        <div className="pb-4">
           <Link to='/createrecommendation' style={{ textDecoration: 'none' }}>
             <Button variant="contained" size="large" endIcon={<AddRoundedIcon />}>
               New
             </Button>
           </Link>
         </div>
-        <div class="grid xl:grid-cols-3 md:grid-cols-2 xs:grid-cols-1">
+        <div className="grid xl:grid-cols-3 md:grid-cols-2 xs:grid-cols-1">
         {loading &&
           <LoadingButton loading variant="outlined">
             Loading
           </LoadingButton>
         }
         {error &&
-        <div class="text-red-600 text-xl pl-2">
-          <span class="pr-2"><ErrorOutlineIcon color="error"/></span>
+        <div className="text-red-600 text-xl pl-2">
+          <span className="pr-2"><ErrorOutlineIcon color="error"/></span>
           {error}
         </div>
         }
         {errorDelete &&
-        <div class="text-red-600 text-lg pl-2">
-          <span class="pr-2"><ErrorOutlineIcon color="error"/></span>
+        <div className="text-red-600 text-lg pl-2">
+          <span className="pr-2"><ErrorOutlineIcon color="error"/></span>
           {errorDelete}
         </div>
         }
@@ -101,8 +101,13 @@ const MyRecommendations = () => {
             Loading
           </LoadingButton>
         }
-        {recommendations?.reverse().map(recommendation => (
-            <div class="pb-4">
+        {recommendations
+          ?.reverse()
+          .filter((filteredRecommendation) =>
+            filteredRecommendation.title.toLowerCase().includes(search.toLowerCase())
+          )
+          .map((recommendation) => (
+            <div className="pb-4">
               <Card sx={{ maxWidth: 345 }} key={recommendation._id}>
                 <CardHeader
                   title={recommendation.title}
@@ -116,11 +121,11 @@ const MyRecommendations = () => {
                     alt={recommendation.title}
                   />
                 }
-                <CardContent>
-                <div class="pb-4">
+                <CardContent key={recommendation._id} >
+                <div className="pb-4">
                 {
                   recommendation.genres.map(genre => (
-                    <Chip key=<React.Fragment>{recommendation._id}{genre}</React.Fragment> variant="outlined" color="primary" label={genre}/>
+                    <Chip key={recommendation._id + genre} variant="outlined" color="primary" label={genre} />
                     ))
                 }
                 </div>
@@ -143,7 +148,7 @@ const MyRecommendations = () => {
                   <IconButton onClick={() => deleteHandler(recommendation._id)} aria-label="delete">
                     <DeleteRoundedIcon />
                   </IconButton>
-                  <div class="text-xs pl-24">Created {recommendation.createdAt.substring(0, 10)}</div>
+                  <div className="text-xs pl-24">Created {recommendation.createdAt.substring(0, 10)}</div>
                 </CardActions>
               </Card>
             </div>
