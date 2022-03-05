@@ -26,11 +26,11 @@ const Search = styled('div')(({ theme }) => ({
   '&:hover': {
     backgroundColor: alpha(theme.palette.common.black, 0.25),
   },
-  marginRight: theme.spacing(2),
+  marginRight: theme.spacing(3),
   marginLeft: 0,
   width: '100%',
   [theme.breakpoints.up('sm')]: {
-    marginLeft: theme.spacing(3),
+    marginLeft: theme.spacing(2),
     width: 'auto',
   },
 }));
@@ -54,7 +54,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     transition: theme.transitions.create('width'),
     width: '100%',
     [theme.breakpoints.up('md')]: {
-      width: '20ch',
+      width: '30ch',
     },
   },
 }));
@@ -150,7 +150,7 @@ const Header = ({ setSearch }) => {
               <SearchIcon />
             </SearchIconWrapper>
             <StyledInputBase
-              placeholder="Search…"
+              placeholder="Search book title or author"
               inputProps={{ 'aria-label': 'search' }}
               onChange={(e) => setSearch(e.target.value)}
             />
