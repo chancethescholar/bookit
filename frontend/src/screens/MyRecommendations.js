@@ -104,7 +104,7 @@ const MyRecommendations = ({ search }) => {
         {recommendations
           ?.reverse()
           .filter((filteredRecommendation) =>
-            filteredRecommendation.title.toLowerCase().includes(search.toLowerCase())
+            filteredRecommendation.title.toLowerCase().includes(search.toLowerCase()) || filteredRecommendation.author.toLowerCase().includes(search.toLowerCase())
           )
           .map((recommendation) => (
             <div className="pb-4">
