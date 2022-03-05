@@ -31,7 +31,7 @@ const CreateRecommendation = () => {
   const [genres, setGenres] = useState("");
   const [genreType, setGenreType] = useState([]);
   const [review, setReview] = useState("");
-  const [rating, setRating] = useState("");
+  const [rating, setRating] = useState(3);
   const [pic, setPic] = useState("no image");
   const [picMessage, setPicMessage] = useState(null);
 
@@ -80,10 +80,10 @@ const CreateRecommendation = () => {
 
   const StyledRating = styled(Rating)({
     '& .MuiRating-iconFilled': {
-      color: '#ff6d75',
+      color: '#0010eb',
     },
     '& .MuiRating-iconHover': {
-      color: '#ff3d47',
+      color: '#333fef',
     },
   });
 

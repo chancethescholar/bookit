@@ -11,6 +11,9 @@ import {
   RECOMMENDATIONS_DELETE_REQUEST,
   RECOMMENDATIONS_DELETE_SUCCESS,
   RECOMMENDATIONS_DELETE_FAIL,
+  RECOMMENDATIONS_LISTALL_REQUEST,
+  RECOMMENDATIONS_LISTALL_SUCCESS,
+  RECOMMENDATIONS_LISTALL_FAIL
 }
 from "../constants/recommendationsConstants";
 
@@ -21,6 +24,21 @@ export const recommendationListReducer = (state = { recommendations: []}, action
     case RECOMMENDATIONS_LIST_SUCCESS:
       return { loading: false, recommendations: action.payload };
     case RECOMMENDATIONS_LIST_FAIL:
+      return { loading: false, error: action.payload };
+
+    default:
+      return state;
+
+  }
+}
+
+export const recommendationListAllReducer = (state = { recommendations: []}, action) => {
+  switch(action.type) {
+    case RECOMMENDATIONS_LISTALL_REQUEST:
+      return { loading: true };
+    case RECOMMENDATIONS_LISTALL_SUCCESS:
+      return { loading: false, recommendations: action.payload };
+    case RECOMMENDATIONS_LISTALL_FAIL:
       return { loading: false, error: action.payload };
 
     default:

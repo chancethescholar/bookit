@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 const Footer = () => {
   return (
     <footer
-      class="text-white text-center"
+      className="text-black text-center mainback bg-slate-100 pt-8 pb-8"
       style={{
         width: "100%",
         position: "relative",
@@ -13,7 +13,7 @@ const Footer = () => {
       }}>
       <Container>
         <Box>
-          Created by Chance Onyiorah
+          Copyright © Chance Onyiorah
         </Box>
       </Container>
     </footer>

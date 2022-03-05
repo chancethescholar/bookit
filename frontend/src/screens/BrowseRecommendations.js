@@ -23,9 +23,9 @@ import FavoriteBorderRoundedIcon from '@mui/icons-material/FavoriteBorderRounded
 import { useNavigate } from "react-router-dom";
 import image from '../images/no-image.png';
 import { useDispatch, useSelector} from "react-redux";
-import { listRecommendations, deleteRecommendationAction } from "../actions/recommendationsActions";
+import { deleteRecommendationAction, listAllRecommendations } from "../actions/recommendationsActions";
 
-const MyRecommendations = ({ search }) => {
+const BrowseRecommendations = ({ search }) => {
   const StyledRating = styled(Rating)({
     '& .MuiRating-iconFilled': {
       color: '#0010eb',
@@ -37,20 +37,20 @@ const MyRecommendations = ({ search }) => {
 
   const dispatch = useDispatch();
 
-  const recommendationList = useSelector((state) => state.recommendationList);
-  const { loading, recommendations, error } = recommendationList;
+  const recommendationListAll = useSelector((state) => state.recommendationListAll);
+  const { loading, recommendations, error } = recommendationListAll;
 
   const userLogin = useSelector(state => state.userLogin);
   const { userInfo } = userLogin;
 
-  const recommendationCreate = useSelector((state) => state.recommendationCreate);
-  const { success: successCreate } = recommendationCreate;
+    //console.log(recommendations);
+    const navigate = useNavigate();
 
-  const recommendationUpdate = useSelector((state) => state.recommendationUpdate);
-  const { success: successUpdate } = recommendationUpdate;
-
-  const recommendationDelete = useSelector((state) => state.recommendationDelete);
-  const { loading: loadingDelete, error: errorDelete, success: successDelete } = recommendationDelete;
+    useEffect(() => {
+      dispatch(listAllRecommendations());
+      if(!userInfo)
+        navigate("/");
+    }, [dispatch, navigate, userInfo])
 
     const deleteHandler = (id) =>
     {
@@ -60,24 +60,8 @@ const MyRecommendations = ({ search }) => {
       }
     };
 
-    //console.log(recommendations);
-    const navigate = useNavigate();
-
-    useEffect(() => {
-      dispatch(listRecommendations());
-      if(!userInfo)
-        navigate("/");
-    }, [dispatch, successCreate, successUpdate, successDelete, navigate, userInfo])
-
     return (
-      <MainScreen title={`${userInfo.username}'s Recommendations`}>
-        <div className="pb-4">
-          <Link to='/createrecommendation' style={{ textDecoration: 'none' }}>
-            <Button variant="contained" size="large" endIcon={<AddRoundedIcon />}>
-              New
-            </Button>
-          </Link>
-        </div>
+      <MainScreen title={"Browse Recommendations"}>
         <div className="grid xl:grid-cols-3 md:grid-cols-2 xs:grid-cols-1">
         {loading &&
           <LoadingButton loading variant="outlined">
@@ -90,17 +74,7 @@ const MyRecommendations = ({ search }) => {
           {error}
         </div>
         }
-        {errorDelete &&
-        <div className="text-red-600 text-lg pl-2">
-          <span className="pr-2"><ErrorOutlineIcon color="error"/></span>
-          {errorDelete}
-        </div>
-        }
-        {loadingDelete &&
-          <LoadingButton loading variant="outlined">
-            Loading
-          </LoadingButton>
-        }
+
         {recommendations
           ?.reverse()
           .filter((filteredRecommendation) =>
@@ -141,15 +115,22 @@ const MyRecommendations = ({ search }) => {
                     readOnly
                   />
                 </CardContent>
-                <CardActions disableSpacing>
-                  <IconButton href={`/recommendation/${recommendation._id}`} aria-label="edit">
-                    <EditRoundedIcon />
-                  </IconButton>
-                  <IconButton onClick={() => deleteHandler(recommendation._id)} aria-label="delete">
-                    <DeleteRoundedIcon />
-                  </IconButton>
-                  <div className="text-xs pl-24">Created {recommendation.createdAt.substring(0, 10)}</div>
-                </CardActions>
+                  <CardActions disableSpacing>
+                  {userInfo._id === recommendation.user ?
+                    <div>
+                    <IconButton href={`/recommendation/${recommendation._id}`} aria-label="edit">
+                      <EditRoundedIcon />
+                    </IconButton>
+                    <IconButton onClick={() => deleteHandler(recommendation._id)} aria-label="delete">
+                      <DeleteRoundedIcon />
+                    </IconButton>
+                    <span className="text-xs pl-24">Created {recommendation.createdAt.substring(0, 10)}</span>
+                    </div>
+                  :
+                  <div className="text-xs pl-44">Created {recommendation.createdAt.substring(0, 10)}</div>
+
+                }
+                  </CardActions>
               </Card>
             </div>
           ))
@@ -159,4 +140,4 @@ const MyRecommendations = ({ search }) => {
     )
 }
 
-export default MyRecommendations;
+export default BrowseRecommendations;

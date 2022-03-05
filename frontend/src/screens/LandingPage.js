@@ -6,15 +6,17 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+import { useNavigate } from 'react-router-dom';
 
 const LandingPage = ({history}) => {
+  const navigate = useNavigate();
   useEffect(() => {
     const userInfo = localStorage.getItem("userInfo");
 
     if(userInfo) {
-      history.push("/myrecommendations");
+      navigate("/myrecommendations");
     }
-  }, [history]);
+  }, [navigate]);
 
   const [index, setIndex] = useState(0);
   const handleSelect = (selectedIndex, e) => {

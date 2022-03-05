@@ -128,10 +128,17 @@ const Header = ({ setSearch }) => {
               <div className="text-black hover:text-cobalt">Home</div>
             </MenuItem>
           </Link>
-                {userInfo &&
+              {userInfo &&
                 <Link to='/myrecommendations' style={{ textDecoration: 'none' }}>
                   <MenuItem key='My Recommendations' onClick={handleCloseNavMenu}>
                     <div className="text-black hover:text-cobalt">My Recommendations</div>
+                  </MenuItem>
+                </Link>
+              }
+              {userInfo &&
+                <Link to='/allrecommendations' style={{ textDecoration: 'none' }}>
+                  <MenuItem key='Browse Recommendations' onClick={handleCloseNavMenu}>
+                    <div className="text-black hover:text-cobalt">Browse Recommendations</div>
                   </MenuItem>
                 </Link>
               }
@@ -184,9 +191,11 @@ const Header = ({ setSearch }) => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
+              <Link to="/profile" style={{ textDecoration: 'none' }}>
               <MenuItem key="Profile" onClick={handleCloseUserMenu}>
                 <Typography textAlign="center">Profile</Typography>
               </MenuItem>
+              </Link>
               <MenuItem key="Logout" onClick={logoutHandler}>
                 <Typography textAlign="center">Logout</Typography>
               </MenuItem>

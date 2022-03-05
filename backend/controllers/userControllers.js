@@ -149,6 +149,35 @@ const authUser = asyncHandler(async (req, res) => {
   }
 });
 
+const updateUserProfile = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+
+  if(user) {
+    user.username = req.body.username || user.username;
+    user.email = req.body.email || user.email;
+    user.pic = req.body.pic || user.pic;
+
+    if(req.body.password) {
+      user.password = req.body.password || user.password;
+    }
+
+    const updatedUser = await user.save();
+
+    res.json({
+      _id: updatedUser._id,
+      username: updatedUser.username,
+      email: updatedUser.email,
+      pic: updatedUser.pic,
+      token: generateToken(updatedUser._id),
+    })
+  }
+
+  else {
+    res.status(404);
+    throw new Error("User not found");
+  }
+});
+
 
 
 function isUpperCase(str) {
@@ -159,4 +188,4 @@ function isLowerCase(str) {
     return (/[a-z]/.test(str));
 }
 
-module.exports = { registerUser, authUser }
+module.exports = { registerUser, authUser, updateUserProfile }

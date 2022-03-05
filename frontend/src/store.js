@@ -1,13 +1,15 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { composeWithDevTools } from "redux-devtools-extension";
-import { userLoginReducer, userSignupReducer } from "./reducers/userReducers";
-import { recommendationListReducer, recommendationCreateReducer, reommendationUpdateReducer, recommendationDeleteReducer } from "./reducers/recommendationsReducers";
+import { userLoginReducer, userSignupReducer, userUpdateReducer } from "./reducers/userReducers";
+import { recommendationListReducer, recommendationListAllReducer, recommendationCreateReducer, reommendationUpdateReducer, recommendationDeleteReducer } from "./reducers/recommendationsReducers";
 
 const reducer = combineReducers({
   userLogin: userLoginReducer,
   userSignup: userSignupReducer,
+  userUpdate: userUpdateReducer,
   recommendationList: recommendationListReducer,
+  recommendationListAll: recommendationListAllReducer,
   recommendationCreate: recommendationCreateReducer,
   recommendationUpdate: reommendationUpdateReducer,
   recommendationDelete: recommendationDeleteReducer,

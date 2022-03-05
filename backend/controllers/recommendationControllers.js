@@ -6,6 +6,11 @@ const getRecommendations = asyncHandler(async (req, res) => {
   res.json(recommendations);
 });
 
+const getAllRecommendations = asyncHandler(async (req, res) => {
+  const recommendations = await Recommendation.find()
+  res.json(recommendations);
+});
+
 const createRecommendation = asyncHandler(async (req, res) => {
   const { title, author, genres, review, rating, image } = req.body;
 
@@ -79,4 +84,4 @@ const deleteRecommendation = asyncHandler( async(req, res) => {
   }
 })
 
-module.exports = { getRecommendations, createRecommendation, getRecommendationById, updateRecommendation, deleteRecommendation };
+module.exports = { getRecommendations, getAllRecommendations, createRecommendation, getRecommendationById, updateRecommendation, deleteRecommendation };

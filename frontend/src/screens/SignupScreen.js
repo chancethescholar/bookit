@@ -21,7 +21,7 @@ const SignupScreen = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [pic, setPic] = useState(
-    "/static/images/avatar/2.jpg"
+    "no image"
   );
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -168,7 +168,7 @@ const SignupScreen = () => {
               <OutlinedInput
                   id="confirmPassword"
                   fullWidth
-                  type={values.showConfirmPassword ? 'text' : 'confirmPassword'}
+                  type={values.showConfirmPassword ? 'text' : 'password'}
                   value={values.confirmPassword}
                   onChange={handleChangeConfirmPassword('confirmPassword')}
                   endAdornment={

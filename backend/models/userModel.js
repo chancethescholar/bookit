@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
-const avatar = "../frontend/src/images/avator.jpg";
 
 const userSchema = mongoose.Schema(
   {
@@ -26,7 +25,7 @@ const userSchema = mongoose.Schema(
     pic: {
       type: String,
       required: true,
-      default: avatar,
+      default: "no image",
     },
   },
   {
