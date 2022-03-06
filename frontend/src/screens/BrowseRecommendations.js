@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import MainScreen from "../components/MainScreen";
 import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar';
+import FormControl from '@mui/material/FormControl';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
@@ -124,36 +125,41 @@ const handleGenreChange = (event) => {
             </Button>
           </Link>
         </div>
-        <div className="pb-4">
-          <FilterListRoundedIcon />
-          <span className="pl-2">Filter by</span>
-            <InputLabel id="demo-multiple-chip-label">Genre(s)</InputLabel>
-            <Select
-              labelId="demo-multiple-chip-label"
-              id="demo-multiple-chip"
-              multiple
-              value={genreType}
-              onChange={handleGenreChange}
-              input={<OutlinedInput id="select-multiple-chip" label="Genre(s)" />}
-              renderValue={(selected) => (
-                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                  {selected.map((value) => (
-                    <Chip key={value} label={value} variant="outlined" color="primary"/>
-                  ))}
-                </Box>
-              )}
-            >
-              {genreTypes.map((genre) => (
-                <MenuItem
-                  key={genre}
-                  value={genre}
-                >
-                  <Checkbox checked={genreType.indexOf(genre) > -1} />
-                  <ListItemText primary={genre} />
-                </MenuItem>
-              ))}
-            </Select>
-
+        <div className="pb-4 flex grid grid-cols-6">
+          <div className="pt-3">
+            <FilterListRoundedIcon />
+            <span className="pl-2">Filter by</span>
+          </div>
+          <div className="col-span-2">
+            <FormControl sx={{ m: 1, width: '100%'}} size='small'>
+              <InputLabel id="demo-multiple-chip-label">Genre(s)</InputLabel>
+              <Select
+                labelId="demo-multiple-chip-label"
+                id="demo-multiple-chip"
+                multiple
+                value={genreType}
+                onChange={handleGenreChange}
+                input={<OutlinedInput id="select-multiple-chip" label="Genre(s)" />}
+                renderValue={(selected) => (
+                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                    {selected.map((value) => (
+                      <Chip key={value} label={value} variant="outlined" color="primary"/>
+                    ))}
+                  </Box>
+                )}
+              >
+                {genreTypes.map((genre) => (
+                  <MenuItem
+                    key={genre}
+                    value={genre}
+                  >
+                    <Checkbox checked={genreType.indexOf(genre) > -1} />
+                    <ListItemText primary={genre} />
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            </div>
         </div>
         <div className="grid xl:grid-cols-3 md:grid-cols-2 xs:grid-cols-1">
         {loading &&
