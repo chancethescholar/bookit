@@ -22,12 +22,61 @@ import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import FavoriteRoundedIcon from '@mui/icons-material/FavoriteRounded';
 import Rating from '@mui/material/Rating';
 import FavoriteBorderRoundedIcon from '@mui/icons-material/FavoriteBorderRounded';
+import FilterListRoundedIcon from '@mui/icons-material/FilterListRounded';
+import Select from '@mui/material/Select';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import Box from '@mui/material/Box';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Checkbox from '@mui/material/Checkbox';
+import ListItemText from '@mui/material/ListItemText';
 import { useNavigate } from "react-router-dom";
 import image from '../images/no-image.png';
 import { useDispatch, useSelector} from "react-redux";
 import { deleteRecommendationAction, listAllRecommendations } from "../actions/recommendationsActions";
 
 const BrowseRecommendations = ({ search }) => {
+  const genreTypes = [
+  'Action/Adventure',
+  'African American Literature',
+  'Biographies/Autobiographies',
+  'Classics',
+  'Children',
+  'Cookbooks',
+  'Fantasy',
+  'Fiction',
+  'Historical',
+  'Horror',
+  'Mystery',
+  'Non Fiction',
+  'Poetry',
+  'Romance',
+  'Sci-Fi',
+  'Self-Help',
+  'Short Story',
+  'Thriller',
+  'True Crime',
+  'Other'
+];
+
+const [genres, setGenres] = useState(genreTypes);
+const [genreType, setGenreType] = useState([]);
+
+const handleGenreChange = (event) => {
+  const {
+    target: { value },
+  } = event;
+  setGenreType(
+    // On autofill we get a stringified value.
+    typeof value === 'string' ? value.split(',') : value,
+  );
+
+  setGenres(event.target.value);
+
+  if(event.target.value.length === 0)
+    setGenres(genreTypes);
+};
+
   const StyledRating = styled(Rating)({
     '& .MuiRating-iconFilled': {
       color: '#0010eb',
@@ -75,6 +124,37 @@ const BrowseRecommendations = ({ search }) => {
             </Button>
           </Link>
         </div>
+        <div className="pb-4">
+          <FilterListRoundedIcon />
+          <span className="pl-2">Filter by</span>
+            <InputLabel id="demo-multiple-chip-label">Genre(s)</InputLabel>
+            <Select
+              labelId="demo-multiple-chip-label"
+              id="demo-multiple-chip"
+              multiple
+              value={genreType}
+              onChange={handleGenreChange}
+              input={<OutlinedInput id="select-multiple-chip" label="Genre(s)" />}
+              renderValue={(selected) => (
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                  {selected.map((value) => (
+                    <Chip key={value} label={value} variant="outlined" color="primary"/>
+                  ))}
+                </Box>
+              )}
+            >
+              {genreTypes.map((genre) => (
+                <MenuItem
+                  key={genre}
+                  value={genre}
+                >
+                  <Checkbox checked={genreType.indexOf(genre) > -1} />
+                  <ListItemText primary={genre} />
+                </MenuItem>
+              ))}
+            </Select>
+
+        </div>
         <div className="grid xl:grid-cols-3 md:grid-cols-2 xs:grid-cols-1">
         {loading &&
           <LoadingButton loading variant="outlined">
@@ -104,6 +184,7 @@ const BrowseRecommendations = ({ search }) => {
           .filter((filteredRecommendation) =>
             filteredRecommendation.title.toLowerCase().includes(search.toLowerCase()) || filteredRecommendation.author.toLowerCase().includes(search.toLowerCase())
           )
+          .filter(filterRec => filterRec.genres.some(recs => genres.includes(recs)))
           .map((recommendation) => (
             <div className="pb-4">
               <Card sx={{ maxWidth: 345 }} key={recommendation._id}>
@@ -111,7 +192,7 @@ const BrowseRecommendations = ({ search }) => {
                   title={recommendation.title}
                   subheader={recommendation.author}
                   action={
-                    <Tooltip title={recommendation.userName}>
+                    <Tooltip title={`More recommendations from ${recommendation.userName}`}>
                     {userInfo.username === recommendation.userName ?
                       <IconButton sx={{ p: 0 }} href="/myrecommendations" aria-label="edit">
                         <Avatar alt={recommendation.userName} src={recommendation.userPic} />
