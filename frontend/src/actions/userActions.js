@@ -9,6 +9,9 @@ import {
   USER_UPDATE_REQUEST,
   USER_UPDATE_SUCCESS,
   USER_UPDATE_FAIL,
+  USER_PIC_REQUEST,
+  USER_PIC_SUCCESS,
+  USER_PIC_FAIL,
   }
 from "../constants/userConstants";
 import axios from 'axios';
@@ -114,6 +117,36 @@ export const updateProfile = (user) => async(dispatch, getState) => {
   catch (error) {
     dispatch({
       type: USER_UPDATE_FAIL,
+      payload:
+        error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message,
+    })
+  }
+}
+
+export const getUserPic = (user) => async(dispatch, getState) => {
+  try {
+    dispatch({ type: USER_PIC_REQUEST });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.post("/api/users/userpic", user, config);
+
+    dispatch({ type: USER_PIC_SUCCESS, payload: data.userPic });
+  }
+  catch (error) {
+    dispatch({
+      type: USER_PIC_FAIL,
       payload:
         error.response && error.response.data.message
         ? error.response.data.message

@@ -31,7 +31,12 @@ const recommendationSchema = mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       required: true,
       ref: "User",
-    }
+    },
+    userPic: {
+      type: String,
+      required: true,
+      ref: "User",
+    },
   },
   {
     timestamps: true,

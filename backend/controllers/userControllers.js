@@ -1,4 +1,5 @@
 const User = require('../models/userModel');
+const Recommendation = require('../models/recommendationModel');
 const asyncHandler = require('express-async-handler');
 const nodemailer = require("nodemailer");
 const generateToken = require('../utils/generateToken');
@@ -161,6 +162,14 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       user.password = req.body.password || user.password;
     }
 
+    if(req.body.pic){
+      const recommendations = await Recommendation.find({ user: req.user._id });
+      for (const recommendation of recommendations) {
+        recommendation.userPic = req.body.pic;
+        const updatedRecommendation = await recommendation.save();
+      }
+    }
+
     const updatedUser = await user.save();
 
     res.json({
@@ -178,7 +187,20 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   }
 });
 
+const getUserPic = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.body.user);
+  let userPic;
 
+  if (user) {
+    userPic = user.pic;
+  }
+
+  else {
+    res.status(404).json({ message: "User picture not found." });
+  }
+
+  res.json({ userPic: userPic });
+})
 
 function isUpperCase(str) {
     return !/[a-z]/.test(str) && /[A-Z]/.test(str);
@@ -188,4 +210,4 @@ function isLowerCase(str) {
     return (/[a-z]/.test(str));
 }
 
-module.exports = { registerUser, authUser, updateUserProfile }
+module.exports = { registerUser, authUser, updateUserProfile, getUserPic }

@@ -1,9 +1,10 @@
 import * as React from 'react';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { styled } from '@mui/material/styles';
 import { Link } from 'react-router-dom';
 import MainScreen from "../components/MainScreen";
 import Button from '@mui/material/Button';
+import Avatar from '@mui/material/Avatar';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
@@ -86,6 +87,11 @@ const BrowseRecommendations = ({ search }) => {
                 <CardHeader
                   title={recommendation.title}
                   subheader={recommendation.author}
+                  avatar={
+                    <IconButton sx={{ p: 0 }}>
+                      <Avatar alt="userpic" src={recommendation.userPic} />
+                    </IconButton>
+                  }
                 />
                 {recommendation.image !== "no image" &&
                   <CardMedia

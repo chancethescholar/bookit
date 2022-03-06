@@ -19,7 +19,7 @@ const createRecommendation = asyncHandler(async (req, res) => {
     throw new Error("Please fill out all fields.");
   }
   else {
-    const recommendation = new Recommendation({ user: req.user._id, title, author, genres, review, rating, image });
+    const recommendation = new Recommendation({ user: req.user._id, userPic: req.user.pic, title, author, genres, review, rating, image });
     const createdRecommendation = await recommendation.save();
     res.status(201).json(createdRecommendation);
   }
