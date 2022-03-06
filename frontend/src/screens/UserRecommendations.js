@@ -1,17 +1,15 @@
 import * as React from 'react';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { styled } from '@mui/material/styles';
 import { Link } from 'react-router-dom';
 import MainScreen from "../components/MainScreen";
 import Button from '@mui/material/Button';
-import Avatar from '@mui/material/Avatar';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
@@ -22,12 +20,14 @@ import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import FavoriteRoundedIcon from '@mui/icons-material/FavoriteRounded';
 import Rating from '@mui/material/Rating';
 import FavoriteBorderRoundedIcon from '@mui/icons-material/FavoriteBorderRounded';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import image from '../images/no-image.png';
 import { useDispatch, useSelector} from "react-redux";
-import { deleteRecommendationAction, listAllRecommendations } from "../actions/recommendationsActions";
+import { listRecommendations, userRecommendationsAction } from "../actions/recommendationsActions";
 
-const BrowseRecommendations = ({ search }) => {
+const UserRecommendations = ({ search, match }) => {
+  const { username } = useParams();
+
   const StyledRating = styled(Rating)({
     '& .MuiRating-iconFilled': {
       color: '#0010eb',
@@ -39,11 +39,8 @@ const BrowseRecommendations = ({ search }) => {
 
   const dispatch = useDispatch();
 
-  const recommendationListAll = useSelector((state) => state.recommendationListAll);
-  const { loading, recommendations, error } = recommendationListAll;
-
-  const recommendationDelete = useSelector((state) => state.recommendationDelete);
-  const { loading: loadingDelete, error: errorDelete, success: successDelete } = recommendationDelete;
+  const recommendationsUser = useSelector((state) => state.recommendationsUser);
+  const { loading, recommendations, error } = recommendationsUser;
 
   const userLogin = useSelector(state => state.userLogin);
   const { userInfo } = userLogin;
@@ -52,29 +49,13 @@ const BrowseRecommendations = ({ search }) => {
     const navigate = useNavigate();
 
     useEffect(() => {
-      dispatch(listAllRecommendations());
+      dispatch(userRecommendationsAction(username));
       if(!userInfo)
         navigate("/");
-    }, [dispatch, successDelete, navigate, userInfo])
-
-
-    const deleteHandler = (id) =>
-    {
-      if(window.confirm("Are you sure you want to delete this recommendation?"))
-      {
-        dispatch(deleteRecommendationAction(id));
-      }
-    };
+    }, [dispatch, navigate, userInfo])
 
     return (
-      <MainScreen title={"Browse Recommendations"}>
-        <div className="pb-4">
-          <Link to='/createrecommendation' style={{ textDecoration: 'none' }}>
-            <Button variant="contained" size="large" endIcon={<AddRoundedIcon />}>
-              New
-            </Button>
-          </Link>
-        </div>
+      <MainScreen title={`${username}'s Recommendations`}>
         <div className="grid xl:grid-cols-3 md:grid-cols-2 xs:grid-cols-1">
         {loading &&
           <LoadingButton loading variant="outlined">
@@ -87,18 +68,6 @@ const BrowseRecommendations = ({ search }) => {
           {error}
         </div>
         }
-        {errorDelete &&
-        <div className="text-red-600 text-lg pl-2">
-          <span className="pr-2"><ErrorOutlineIcon color="error"/></span>
-          {errorDelete}
-        </div>
-        }
-        {loadingDelete &&
-          <LoadingButton loading variant="outlined">
-            Loading
-          </LoadingButton>
-        }
-
         {recommendations
           ?.reverse()
           .filter((filteredRecommendation) =>
@@ -110,21 +79,7 @@ const BrowseRecommendations = ({ search }) => {
                 <CardHeader
                   title={recommendation.title}
                   subheader={recommendation.author}
-                  action={
-                    <Tooltip title={recommendation.userName}>
-                    {userInfo.username === recommendation.userName ?
-                      <IconButton sx={{ p: 0 }} href="/myrecommendations" aria-label="edit">
-                        <Avatar alt={recommendation.userName} src={recommendation.userPic} />
-                      </IconButton>
-                      :
-                      <IconButton sx={{ p: 0 }} href={`/recommendations/view/${recommendation.userName}`} aria-label="edit">
-                        <Avatar alt={recommendation.userName} src={recommendation.userPic} />
-                      </IconButton>
-                    }
-                    </Tooltip>
-                  }
                 />
-
                 {recommendation.image !== "no image" &&
                   <CardMedia
                     component="img"
@@ -153,22 +108,6 @@ const BrowseRecommendations = ({ search }) => {
                     readOnly
                   />
                 </CardContent>
-                  <CardActions disableSpacing>
-                  {userInfo._id === recommendation.user ?
-                    <div>
-                    <IconButton href={`/recommendation/${recommendation._id}`} aria-label="edit">
-                      <EditRoundedIcon />
-                    </IconButton>
-                    <IconButton onClick={() => deleteHandler(recommendation._id)} aria-label="delete">
-                      <DeleteRoundedIcon />
-                    </IconButton>
-                    <span className="text-xs pl-24">Created {recommendation.createdAt.substring(0, 10)}</span>
-                    </div>
-                  :
-                  <div className="text-xs pl-44">Created {recommendation.createdAt.substring(0, 10)}</div>
-
-                }
-                  </CardActions>
               </Card>
             </div>
           ))
@@ -178,4 +117,4 @@ const BrowseRecommendations = ({ search }) => {
     )
 }
 
-export default BrowseRecommendations;
+export default UserRecommendations;

@@ -14,7 +14,10 @@ import {
   RECOMMENDATIONS_DELETE_FAIL,
   RECOMMENDATIONS_LISTALL_REQUEST,
   RECOMMENDATIONS_LISTALL_SUCCESS,
-  RECOMMENDATIONS_LISTALL_FAIL
+  RECOMMENDATIONS_LISTALL_FAIL,
+  RECOMMENDATIONS_USER_REQUEST,
+  RECOMMENDATIONS_USER_SUCCESS,
+  RECOMMENDATIONS_USER_FAIL,
 }
 from "../constants/recommendationsConstants";
 
@@ -206,6 +209,43 @@ export const deleteRecommendationAction = (id) => async (dispatch, getState) => 
       : error.message;
     dispatch({
       type: RECOMMENDATIONS_DELETE_FAIL,
+      payload: message
+    });
+  }
+}
+
+export const userRecommendationsAction = (username) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: RECOMMENDATIONS_USER_REQUEST,
+    });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.get(`/api/recommendations/view/${username}`, config);
+
+    dispatch({
+      type: RECOMMENDATIONS_USER_SUCCESS,
+      payload: data,
+    });
+  }
+
+  catch (error) {
+    const message =
+      error.response && error.response.data.message
+      ? error.response.data.message
+      : error.message;
+    dispatch({
+      type: RECOMMENDATIONS_USER_FAIL,
       payload: message
     });
   }

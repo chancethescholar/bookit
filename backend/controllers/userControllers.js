@@ -153,6 +153,18 @@ const authUser = asyncHandler(async (req, res) => {
 const updateUserProfile = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
 
+  const userWithName = await User.findOne({ username: req.body.username });
+  if(userWithName && user.username !== req.body.username) {
+    res.status(401);
+    throw new Error("Usrername already taken. Please try a different one.")
+  }
+
+  const userWithEmail = await User.findOne({ email: req.body.email });
+  if(userWithEmail && user.email !== req.body.email) {
+    res.status(401);
+    throw new Error("Usrername already taken. Please try a different one.")
+  }
+
   if(user) {
     user.username = req.body.username || user.username;
     user.email = req.body.email || user.email;
@@ -168,6 +180,12 @@ const updateUserProfile = asyncHandler(async (req, res) => {
         recommendation.userPic = req.body.pic;
         const updatedRecommendation = await recommendation.save();
       }
+    }
+
+    recommendations = await Recommendation.find({ user: req.user._id });
+    for (const recommendation of recommendations) {
+      recommendation.userName = req.body.username;
+      const updatedRecommendation = await recommendation.save();
     }
 
     const updatedUser = await user.save();

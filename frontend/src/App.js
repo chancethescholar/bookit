@@ -10,6 +10,7 @@ import CreateRecommendation from "./screens/CreateRecommendation";
 import EditRecommendation from "./screens/EditRecommendation";
 import ProfileScreen from "./screens/ProfileScreen";
 import BrowseRecommendations from "./screens/BrowseRecommendations";
+import UserRecommendations from "./screens/UserRecommendations";
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -49,6 +50,7 @@ const App = () => {
             <Route path='/recommendation/:id' element={<EditRecommendation />} exact/>
             <Route path='/profile' element={<ProfileScreen />} exact />
             <Route path='/allrecommendations' element={<BrowseRecommendations search={ search }/>} exact />
+            <Route path='/recommendations/view/:username' element={<UserRecommendations search={ search }/>} exact />
           </Routes>
         <Footer />
     </Router>

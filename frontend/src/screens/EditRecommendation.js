@@ -26,7 +26,7 @@ import { useDispatch, useSelector} from "react-redux";
 import { updateRecommendationAction, recommendationDeleteReducer } from '../actions/recommendationsActions';
 import axios from 'axios';
 
-const EditRecommendation = ({ match }) => {
+const EditRecommendation = () => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [genres, setGenres] = useState([]);

@@ -37,6 +37,11 @@ const recommendationSchema = mongoose.Schema(
       required: true,
       ref: "User",
     },
+    userName: {
+      type: String,
+      required: true,
+      ref: "User",
+    },
   },
   {
     timestamps: true,

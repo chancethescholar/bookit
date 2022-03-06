@@ -11,6 +11,11 @@ const getAllRecommendations = asyncHandler(async (req, res) => {
   res.json(recommendations);
 });
 
+const getUserRecommendations = asyncHandler(async (req, res) => {
+  const recommendations = await Recommendation.find({ userName: req.params.username })
+  res.json(recommendations);
+});
+
 const createRecommendation = asyncHandler(async (req, res) => {
   const { title, author, genres, review, rating, image } = req.body;
 
@@ -19,7 +24,7 @@ const createRecommendation = asyncHandler(async (req, res) => {
     throw new Error("Please fill out all fields.");
   }
   else {
-    const recommendation = new Recommendation({ user: req.user._id, userPic: req.user.pic, title, author, genres, review, rating, image });
+    const recommendation = new Recommendation({ user: req.user._id, userPic: req.user.pic, userName: req.user.username, title, author, genres, review, rating, image });
     const createdRecommendation = await recommendation.save();
     res.status(201).json(createdRecommendation);
   }
@@ -84,4 +89,4 @@ const deleteRecommendation = asyncHandler( async(req, res) => {
   }
 })
 
-module.exports = { getRecommendations, getAllRecommendations, createRecommendation, getRecommendationById, updateRecommendation, deleteRecommendation };
+module.exports = { getRecommendations, getAllRecommendations, getUserRecommendations, createRecommendation, getRecommendationById, updateRecommendation, deleteRecommendation };

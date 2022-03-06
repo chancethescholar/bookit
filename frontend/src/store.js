@@ -2,7 +2,7 @@ import { createStore, combineReducers, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { composeWithDevTools } from "redux-devtools-extension";
 import { userLoginReducer, userSignupReducer, userUpdateReducer } from "./reducers/userReducers";
-import { recommendationListReducer, recommendationListAllReducer, recommendationCreateReducer, reommendationUpdateReducer, recommendationDeleteReducer } from "./reducers/recommendationsReducers";
+import { recommendationListReducer, recommendationListAllReducer, recommendationCreateReducer, reommendationUpdateReducer, recommendationDeleteReducer, recommendationsUserReducer } from "./reducers/recommendationsReducers";
 
 const reducer = combineReducers({
   userLogin: userLoginReducer,
@@ -13,6 +13,7 @@ const reducer = combineReducers({
   recommendationCreate: recommendationCreateReducer,
   recommendationUpdate: reommendationUpdateReducer,
   recommendationDelete: recommendationDeleteReducer,
+  recommendationsUser: recommendationsUserReducer,
 })
 
 const userInfoFromStorage = localStorage.getItem("userInfo")

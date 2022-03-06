@@ -1,5 +1,5 @@
 const express = require("express");
-const { getRecommendations, getAllRecommendations, createRecommendation, getRecommendationById, updateRecommendation, deleteRecommendation }
+const { getRecommendations, getAllRecommendations, getUserRecommendations, createRecommendation, getRecommendationById, updateRecommendation, deleteRecommendation }
 = require("../controllers/recommendationControllers");
 const { protect } = require("../middlewares/authMiddleware");
 
@@ -11,5 +11,6 @@ router.route('/create').post(protect, createRecommendation);
 router.route('/:id').get(getRecommendationById);
 router.route('/:id').put(protect, updateRecommendation);
 router.route('/:id').delete(protect, deleteRecommendation);
+router.route('/view/:username').get(protect, getUserRecommendations);
 
 module.exports = router;
