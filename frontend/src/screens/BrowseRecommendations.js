@@ -60,8 +60,14 @@ const BrowseRecommendations = ({ search }) => {
   'Other'
 ];
 
+const ratingNumbers = [
+  1,2,3,4,5
+]
+
 const [genres, setGenres] = useState(genreTypes);
 const [genreType, setGenreType] = useState([]);
+const [ratings, setRatings] = useState(ratingNumbers);
+const [ratingNumber, setRatingNumber] = useState([]);
 
 const handleGenreChange = (event) => {
   const {
@@ -76,6 +82,21 @@ const handleGenreChange = (event) => {
 
   if(event.target.value.length === 0)
     setGenres(genreTypes);
+};
+
+const handleRatingChange = (event) => {
+  const {
+    target: { value },
+  } = event;
+  setRatingNumber(
+    // On autofill we get a stringified value.
+    typeof value === 'string' ? value.split(',') : value,
+  );
+
+  setRatings(event.target.value);
+
+  if(event.target.value.length === 0)
+    setRatings(ratingNumbers);
 };
 
   const StyledRating = styled(Rating)({
@@ -132,14 +153,14 @@ const handleGenreChange = (event) => {
           </div>
           <div className="col-span-2">
             <FormControl sx={{ m: 1, width: '100%'}} size='small'>
-              <InputLabel id="demo-multiple-chip-label">Genre(s)</InputLabel>
+              <InputLabel id="demo-multiple-chip-label">Genre</InputLabel>
               <Select
                 labelId="demo-multiple-chip-label"
                 id="demo-multiple-chip"
                 multiple
                 value={genreType}
                 onChange={handleGenreChange}
-                input={<OutlinedInput id="select-multiple-chip" label="Genre(s)" />}
+                input={<OutlinedInput id="select-multiple-chip" label="Genre" />}
                 renderValue={(selected) => (
                   <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                     {selected.map((value) => (
@@ -159,7 +180,40 @@ const handleGenreChange = (event) => {
                 ))}
               </Select>
             </FormControl>
-            </div>
+          </div>
+          <div className="col-span-2">
+            <FormControl sx={{ m: 1, width: '100%'}} size='small'>
+              <InputLabel id="demo-multiple-chip-label">Rating</InputLabel>
+              <Select
+                labelId="demo-multiple-chip-label"
+                id="demo-multiple-chip"
+                multiple
+                value={ratingNumber}
+                onChange={handleRatingChange}
+                input={<OutlinedInput id="select-multiple" label="Rating" />}
+                renderValue={(selected) => selected.join(', ').concat(' hearts')}
+              >
+                {ratingNumbers.reverse().map((rating) => (
+                  <MenuItem
+                    key={rating}
+                    value={rating}
+                  >
+                    <Checkbox checked={ratingNumber.indexOf(rating) > -1} />
+                    <StyledRating
+                      name="rating"
+                      defaultValue={rating}
+                      getLabelText={(value) => `${value} Book${value !== 1 ? 's' : ''}`}
+                      precision={1}
+                      icon={<FavoriteRoundedIcon fontSize="large" />}
+                      emptyIcon={<FavoriteBorderRoundedIcon fontSize="large" />}
+                      className="pl-1"
+                      readOnly
+                    />
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </div>
         </div>
         <div className="grid xl:grid-cols-3 md:grid-cols-2 xs:grid-cols-1">
         {loading &&
@@ -190,7 +244,8 @@ const handleGenreChange = (event) => {
           .filter((filteredRecommendation) =>
             filteredRecommendation.title.toLowerCase().includes(search.toLowerCase()) || filteredRecommendation.author.toLowerCase().includes(search.toLowerCase())
           )
-          .filter(filterRec => filterRec.genres.some(recs => genres.includes(recs)))
+          .filter(filterRecGenre => filterRecGenre.genres.some(recs => genres.includes(recs)))
+          .filter(filterRecRating => ratings.includes(filterRecRating.rating))
           .map((recommendation) => (
             <div className="pb-4">
               <Card sx={{ maxWidth: 345 }} key={recommendation._id}>
@@ -233,7 +288,7 @@ const handleGenreChange = (event) => {
                     name="rating"
                     defaultValue={recommendation.rating}
                     getLabelText={(value) => `${value} Book${value !== 1 ? 's' : ''}`}
-                    precision={0.5}
+                    precision={1}
                     icon={<FavoriteRoundedIcon fontSize="large" />}
                     emptyIcon={<FavoriteBorderRoundedIcon fontSize="large" />}
                     className="pl-1"

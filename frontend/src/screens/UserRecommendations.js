@@ -101,7 +101,7 @@ const UserRecommendations = ({ search, match }) => {
                     name="rating"
                     defaultValue={recommendation.rating}
                     getLabelText={(value) => `${value} Book${value !== 1 ? 's' : ''}`}
-                    precision={0.5}
+                    precision={1}
                     icon={<FavoriteRoundedIcon fontSize="large" />}
                     emptyIcon={<FavoriteBorderRoundedIcon fontSize="large" />}
                     className="pl-1"
