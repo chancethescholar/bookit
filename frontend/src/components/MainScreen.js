@@ -2,7 +2,7 @@ import Container from '@mui/material/Container';
 
  const MainScreen = ({title, children}) => {
    return (
-     <div className="mainback bg-slate-100" style={{minHeight: "93vh"}}>
+     <div id="top" className="mainback bg-slate-100" style={{minHeight: "93vh"}}>
       <Container>
         <div class="grid grid-rows-1">
           <div className="page text-black pt-8 pl-8 font-mono">
