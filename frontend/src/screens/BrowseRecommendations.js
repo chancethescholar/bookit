@@ -23,7 +23,8 @@ import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import FavoriteRoundedIcon from '@mui/icons-material/FavoriteRounded';
 import Rating from '@mui/material/Rating';
 import FavoriteBorderRoundedIcon from '@mui/icons-material/FavoriteBorderRounded';
-import FilterListRoundedIcon from '@mui/icons-material/FilterListRounded';
+import FilterAltRoundedIcon from '@mui/icons-material/FilterAltRounded';
+import SortRoundedIcon from '@mui/icons-material/SortRounded';
 import Select from '@mui/material/Select';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import Box from '@mui/material/Box';
@@ -64,10 +65,22 @@ const ratingNumbers = [
   1,2,3,4,5
 ]
 
+const sortTypes = [
+  "None",
+  "Newest to Oldest",
+  "Oldest to Newest",
+  "Title (A to Z)",
+  "Title (Z to A)",
+  "Rating (high to low)",
+  "Rating (low to high)",
+]
+
 const [genres, setGenres] = useState(genreTypes);
 const [genreType, setGenreType] = useState([]);
 const [ratings, setRatings] = useState(ratingNumbers);
 const [ratingNumber, setRatingNumber] = useState([]);
+const [sort, setSort] = useState(genreTypes);
+const [sortType, setSortType] = useState([]);
 
 const handleGenreChange = (event) => {
   const {
@@ -97,6 +110,63 @@ const handleRatingChange = (event) => {
 
   if(event.target.value.length === 0)
     setRatings(ratingNumbers);
+};
+
+const handleSortChange = (event) => {
+  const {
+    target: { value },
+  } = event;
+  setSortType(
+    // On autofill we get a stringified value.
+    typeof value === 'string' ? value.split(',') : value,
+  );
+
+  if(event.target.value === "None")
+  {
+    recommendations = recommendations.sort(function(a, b) {
+      return a.createdAt.localeCompare(b.createdAt);
+    })
+  }
+
+  if(event.target.value === "Newest to Oldest")
+  {
+    recommendations = recommendations.sort(function(a, b) {
+      return a.createdAt.localeCompare(b.createdAt);
+    })
+  }
+
+  if(event.target.value === "Oldest to Newest")
+  {
+    recommendations = recommendations.sort(function(a, b) {
+      return b.createdAt.localeCompare(a.createdAt);
+    })
+  }
+
+  if(event.target.value === "Title (A to Z)")
+  {
+    recommendations = recommendations.sort(function(a, b) {
+      return a.title.localeCompare(b.title);
+    })
+  }
+
+  if(event.target.value === "Title (Z to A)")
+  {
+    recommendations = recommendations.sort(function(a, b) {
+      return b.title.localeCompare(a.title);
+    })
+  }
+
+  if(event.target.value === "Rating (high to low)")
+  {
+    recommendations = recommendations.sort(({rating:a}, {rating:b}) => b-a);
+  }
+
+  if(event.target.value === "Rating (low to high)")
+  {
+    recommendations = recommendations.sort(({rating:a}, {rating:b}) => a-b);
+  }
+
+
 };
 
   const StyledRating = styled(Rating)({
@@ -146,9 +216,9 @@ const handleRatingChange = (event) => {
             </Button>
           </Link>
         </div>
-        <div className="pb-4 flex grid grid-cols-6">
+        <div className="pb-4 flex grid grid-cols-8">
           <div className="pt-3">
-            <FilterListRoundedIcon />
+            <FilterAltRoundedIcon />
             <span className="pl-2">Filter by</span>
           </div>
           <div className="col-span-2">
@@ -181,7 +251,7 @@ const handleRatingChange = (event) => {
               </Select>
             </FormControl>
           </div>
-          <div className="col-span-2">
+          <div className="col-span-1 pl-4">
             <FormControl sx={{ m: 1, width: '100%'}} size='small'>
               <InputLabel id="demo-multiple-chip-label">Rating</InputLabel>
               <Select
@@ -209,6 +279,29 @@ const handleRatingChange = (event) => {
                       className="pl-1"
                       readOnly
                     />
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </div>
+          <div className="pt-3 pl-4">
+            <SortRoundedIcon />
+            <span className="pl-2">Sort by</span>
+          </div>
+          <div className="col-span-2">
+            <FormControl sx={{ m: 1, width: '100%'}} size='small'>
+              <Select
+                value={sortType}
+                onChange={handleSortChange}
+                displayEmpty
+                inputProps={{ 'aria-label': 'Without label' }}
+              >
+                {sortTypes.map((sort) => (
+                  <MenuItem
+                    key={sort}
+                    value={sort}
+                  >
+                    <ListItemText primary={sort} />
                   </MenuItem>
                 ))}
               </Select>
@@ -245,9 +338,16 @@ const handleRatingChange = (event) => {
             filteredRecommendation.title.toLowerCase().includes(search.toLowerCase()) || filteredRecommendation.author.toLowerCase().includes(search.toLowerCase())
           )
           .filter(filterRecGenre => filterRecGenre.genres.some(recs => genres.includes(recs)))
-          .filter(filterRecRating => ratings.includes(filterRecRating.rating))
+          .filter(filterRecRating => ratings.includes(filterRecRating.rating)).length > 0 ?
+
+          recommendations
+            ?.filter((filteredRecommendation) =>
+              filteredRecommendation.title.toLowerCase().includes(search.toLowerCase()) || filteredRecommendation.author.toLowerCase().includes(search.toLowerCase())
+            )
+            .filter(filterRecGenre => filterRecGenre.genres.some(recs => genres.includes(recs)))
+            .filter(filterRecRating => ratings.includes(filterRecRating.rating))
           .map((recommendation) => (
-            <div className="pb-4">
+            <div className="pb-4 pt-4">
               <Card sx={{ maxWidth: 345 }} key={recommendation._id}>
                 <CardHeader
                   title={recommendation.title}
@@ -314,6 +414,8 @@ const handleRatingChange = (event) => {
               </Card>
             </div>
           ))
+          :
+          <div className="pt-4 text-2xl text-center justify-center flex grid col-span-6">No recommendations found matching that criteria.</div>
         }
         </div>
       </MainScreen>
