@@ -145,14 +145,14 @@ const handleSortChange = (event) => {
   if(event.target.value === "Title (A to Z)")
   {
     recommendations = recommendations.sort(function(a, b) {
-      return a.title.localeCompare(b.title);
+      return b.title.localeCompare(a.title);
     })
   }
 
   if(event.target.value === "Title (Z to A)")
   {
     recommendations = recommendations.sort(function(a, b) {
-      return b.title.localeCompare(a.title);
+      return a.title.localeCompare(b.title);
     })
   }
 
