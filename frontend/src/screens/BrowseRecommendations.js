@@ -61,113 +61,113 @@ const BrowseRecommendations = ({ search }) => {
   'Other'
 ];
 
-const ratingNumbers = [
-  1,2,3,4,5
-]
+  const ratingNumbers = [
+    1,2,3,4,5
+  ]
 
-const sortTypes = [
-  "None",
-  "Newest to Oldest",
-  "Oldest to Newest",
-  "Title (A to Z)",
-  "Title (Z to A)",
-  "Rating (high to low)",
-  "Rating (low to high)",
-]
+  const sortTypes = [
+    "None",
+    "Newest to Oldest",
+    "Oldest to Newest",
+    "Title (A to Z)",
+    "Title (Z to A)",
+    "Rating (high to low)",
+    "Rating (low to high)",
+  ]
 
-const [genres, setGenres] = useState(genreTypes);
-const [genreType, setGenreType] = useState([]);
-const [ratings, setRatings] = useState(ratingNumbers);
-const [ratingNumber, setRatingNumber] = useState([]);
-const [sort, setSort] = useState(genreTypes);
-const [sortType, setSortType] = useState([]);
+  const [genres, setGenres] = useState(genreTypes);
+  const [genreType, setGenreType] = useState([]);
+  const [ratings, setRatings] = useState(ratingNumbers);
+  const [ratingNumber, setRatingNumber] = useState([]);
+  const [sort, setSort] = useState(genreTypes);
+  const [sortType, setSortType] = useState([]);
 
-const handleGenreChange = (event) => {
-  const {
-    target: { value },
-  } = event;
-  setGenreType(
-    // On autofill we get a stringified value.
-    typeof value === 'string' ? value.split(',') : value,
-  );
+  const handleGenreChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setGenreType(
+      // On autofill we get a stringified value.
+      typeof value === 'string' ? value.split(',') : value,
+    );
 
-  setGenres(event.target.value);
+    setGenres(event.target.value);
 
-  if(event.target.value.length === 0)
-    setGenres(genreTypes);
-};
+    if(event.target.value.length === 0)
+      setGenres(genreTypes);
+  };
 
-const handleRatingChange = (event) => {
-  const {
-    target: { value },
-  } = event;
-  setRatingNumber(
-    // On autofill we get a stringified value.
-    typeof value === 'string' ? value.split(',') : value,
-  );
+  const handleRatingChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setRatingNumber(
+      // On autofill we get a stringified value.
+      typeof value === 'string' ? value.split(',') : value,
+    );
 
-  setRatings(event.target.value);
+    setRatings(event.target.value);
 
-  if(event.target.value.length === 0)
-    setRatings(ratingNumbers);
-};
+    if(event.target.value.length === 0)
+      setRatings(ratingNumbers);
+  };
 
-const handleSortChange = (event) => {
-  const {
-    target: { value },
-  } = event;
-  setSortType(
-    // On autofill we get a stringified value.
-    typeof value === 'string' ? value.split(',') : value,
-  );
+  const handleSortChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setSortType(
+      // On autofill we get a stringified value.
+      typeof value === 'string' ? value.split(',') : value,
+    );
 
-  if(event.target.value === "None")
-  {
-    recommendations = recommendations.sort(function(a, b) {
-      return a.createdAt.localeCompare(b.createdAt);
-    })
-  }
+    if(event.target.value === "None")
+    {
+      recommendations = recommendations.sort(function(a, b) {
+        return a.createdAt.localeCompare(b.createdAt);
+      })
+    }
 
-  if(event.target.value === "Newest to Oldest")
-  {
-    recommendations = recommendations.sort(function(a, b) {
-      return a.createdAt.localeCompare(b.createdAt);
-    })
-  }
+    if(event.target.value === "Newest to Oldest")
+    {
+      recommendations = recommendations.sort(function(a, b) {
+        return a.createdAt.localeCompare(b.createdAt);
+      })
+    }
 
-  if(event.target.value === "Oldest to Newest")
-  {
-    recommendations = recommendations.sort(function(a, b) {
-      return b.createdAt.localeCompare(a.createdAt);
-    })
-  }
+    if(event.target.value === "Oldest to Newest")
+    {
+      recommendations = recommendations.sort(function(a, b) {
+        return b.createdAt.localeCompare(a.createdAt);
+      })
+    }
 
-  if(event.target.value === "Title (A to Z)")
-  {
-    recommendations = recommendations.sort(function(a, b) {
-      return b.title.localeCompare(a.title);
-    })
-  }
+    if(event.target.value === "Title (A to Z)")
+    {
+      recommendations = recommendations.sort(function(a, b) {
+        return b.title.localeCompare(a.title);
+      })
+    }
 
-  if(event.target.value === "Title (Z to A)")
-  {
-    recommendations = recommendations.sort(function(a, b) {
-      return a.title.localeCompare(b.title);
-    })
-  }
+    if(event.target.value === "Title (Z to A)")
+    {
+      recommendations = recommendations.sort(function(a, b) {
+        return a.title.localeCompare(b.title);
+      })
+    }
 
-  if(event.target.value === "Rating (high to low)")
-  {
-    recommendations = recommendations.sort(({rating:a}, {rating:b}) => b-a);
-  }
+    if(event.target.value === "Rating (high to low)")
+    {
+      recommendations = recommendations.sort(({rating:a}, {rating:b}) => a-b);
+    }
 
-  if(event.target.value === "Rating (low to high)")
-  {
-    recommendations = recommendations.sort(({rating:a}, {rating:b}) => a-b);
-  }
+    if(event.target.value === "Rating (low to high)")
+    {
+      recommendations = recommendations.sort(({rating:a}, {rating:b}) => b-a);
+    }
 
 
-};
+  };
 
   const StyledRating = styled(Rating)({
     '& .MuiRating-iconFilled': {

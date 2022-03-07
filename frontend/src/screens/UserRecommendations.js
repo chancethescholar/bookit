@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { styled } from '@mui/material/styles';
 import { Link } from 'react-router-dom';
 import MainScreen from "../components/MainScreen";
@@ -20,12 +20,153 @@ import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import FavoriteRoundedIcon from '@mui/icons-material/FavoriteRounded';
 import Rating from '@mui/material/Rating';
 import FavoriteBorderRoundedIcon from '@mui/icons-material/FavoriteBorderRounded';
+import FormControl from '@mui/material/FormControl';
+import FilterAltRoundedIcon from '@mui/icons-material/FilterAltRounded';
+import SortRoundedIcon from '@mui/icons-material/SortRounded';
+import Select from '@mui/material/Select';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import Box from '@mui/material/Box';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Checkbox from '@mui/material/Checkbox';
+import ListItemText from '@mui/material/ListItemText';
+
 import { useNavigate, useParams } from "react-router-dom";
 import image from '../images/no-image.png';
 import { useDispatch, useSelector} from "react-redux";
 import { listRecommendations, userRecommendationsAction } from "../actions/recommendationsActions";
 
 const UserRecommendations = ({ search, match }) => {
+  const genreTypes = [
+  'Action/Adventure',
+  'African American Literature',
+  'Biographies/Autobiographies',
+  'Classics',
+  'Children',
+  'Cookbooks',
+  'Fantasy',
+  'Fiction',
+  'Historical',
+  'Horror',
+  'Mystery',
+  'Non Fiction',
+  'Poetry',
+  'Romance',
+  'Sci-Fi',
+  'Self-Help',
+  'Short Story',
+  'Thriller',
+  'True Crime',
+  'Other'
+];
+
+  const ratingNumbers = [
+    1,2,3,4,5
+  ]
+
+  const sortTypes = [
+    "None",
+    "Newest to Oldest",
+    "Oldest to Newest",
+    "Title (A to Z)",
+    "Title (Z to A)",
+    "Rating (high to low)",
+    "Rating (low to high)",
+  ]
+
+  const [genres, setGenres] = useState(genreTypes);
+  const [genreType, setGenreType] = useState([]);
+  const [ratings, setRatings] = useState(ratingNumbers);
+  const [ratingNumber, setRatingNumber] = useState([]);
+  const [sort, setSort] = useState(genreTypes);
+  const [sortType, setSortType] = useState([]);
+
+  const handleGenreChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setGenreType(
+      // On autofill we get a stringified value.
+      typeof value === 'string' ? value.split(',') : value,
+    );
+
+    setGenres(event.target.value);
+
+    if(event.target.value.length === 0)
+      setGenres(genreTypes);
+  };
+
+  const handleRatingChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setRatingNumber(
+      // On autofill we get a stringified value.
+      typeof value === 'string' ? value.split(',') : value,
+    );
+
+    setRatings(event.target.value);
+
+    if(event.target.value.length === 0)
+      setRatings(ratingNumbers);
+  };
+
+  const handleSortChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setSortType(
+      // On autofill we get a stringified value.
+      typeof value === 'string' ? value.split(',') : value,
+    );
+
+    if(event.target.value === "None")
+    {
+      recommendations = recommendations.sort(function(a, b) {
+        return a.createdAt.localeCompare(b.createdAt);
+      })
+    }
+
+    if(event.target.value === "Newest to Oldest")
+    {
+      recommendations = recommendations.sort(function(a, b) {
+        return a.createdAt.localeCompare(b.createdAt);
+      })
+    }
+
+    if(event.target.value === "Oldest to Newest")
+    {
+      recommendations = recommendations.sort(function(a, b) {
+        return b.createdAt.localeCompare(a.createdAt);
+      })
+    }
+
+    if(event.target.value === "Title (A to Z)")
+    {
+      recommendations = recommendations.sort(function(a, b) {
+        return b.title.localeCompare(a.title);
+      })
+    }
+
+    if(event.target.value === "Title (Z to A)")
+    {
+      recommendations = recommendations.sort(function(a, b) {
+        return a.title.localeCompare(b.title);
+      })
+    }
+
+    if(event.target.value === "Rating (high to low)")
+    {
+      recommendations = recommendations.sort(({rating:a}, {rating:b}) => a-b);
+    }
+
+    if(event.target.value === "Rating (low to high)")
+    {
+      recommendations = recommendations.sort(({rating:a}, {rating:b}) => b-a);
+    }
+
+
+  };
   const { username } = useParams();
 
   const StyledRating = styled(Rating)({
@@ -56,6 +197,98 @@ const UserRecommendations = ({ search, match }) => {
 
     return (
       <MainScreen title={`${username}'s Recommendations`}>
+        <div className="pb-4 flex grid grid-cols-8">
+          <div className="pt-3">
+            <FilterAltRoundedIcon />
+            <span className="pl-2">Filter by</span>
+          </div>
+          <div className="col-span-2">
+            <FormControl sx={{ m: 1, width: '100%'}} size='small'>
+              <InputLabel id="demo-multiple-chip-label">Genre</InputLabel>
+              <Select
+                labelId="demo-multiple-chip-label"
+                id="demo-multiple-chip"
+                multiple
+                value={genreType}
+                onChange={handleGenreChange}
+                input={<OutlinedInput id="select-multiple-chip" label="Genre" />}
+                renderValue={(selected) => (
+                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                    {selected.map((value) => (
+                      <Chip key={value} label={value} variant="outlined" color="primary"/>
+                    ))}
+                  </Box>
+                )}
+              >
+                {genreTypes.map((genre) => (
+                  <MenuItem
+                    key={genre}
+                    value={genre}
+                  >
+                    <Checkbox checked={genreType.indexOf(genre) > -1} />
+                    <ListItemText primary={genre} />
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </div>
+          <div className="col-span-1 pl-4">
+            <FormControl sx={{ m: 1, width: '100%'}} size='small'>
+              <InputLabel id="demo-multiple-chip-label">Rating</InputLabel>
+              <Select
+                labelId="demo-multiple-chip-label"
+                id="demo-multiple-chip"
+                multiple
+                value={ratingNumber}
+                onChange={handleRatingChange}
+                input={<OutlinedInput id="select-multiple" label="Rating" />}
+                renderValue={(selected) => selected.join(', ').concat(' hearts')}
+              >
+                {ratingNumbers.reverse().map((rating) => (
+                  <MenuItem
+                    key={rating}
+                    value={rating}
+                  >
+                    <Checkbox checked={ratingNumber.indexOf(rating) > -1} />
+                    <StyledRating
+                      name="rating"
+                      defaultValue={rating}
+                      getLabelText={(value) => `${value} Book${value !== 1 ? 's' : ''}`}
+                      precision={1}
+                      icon={<FavoriteRoundedIcon fontSize="large" />}
+                      emptyIcon={<FavoriteBorderRoundedIcon fontSize="large" />}
+                      className="pl-1"
+                      readOnly
+                    />
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </div>
+          <div className="pt-3 pl-4">
+            <SortRoundedIcon />
+            <span className="pl-2">Sort by</span>
+          </div>
+          <div className="col-span-2">
+            <FormControl sx={{ m: 1, width: '100%'}} size='small'>
+              <Select
+                value={sortType}
+                onChange={handleSortChange}
+                displayEmpty
+                inputProps={{ 'aria-label': 'Without label' }}
+              >
+                {sortTypes.map((sort) => (
+                  <MenuItem
+                    key={sort}
+                    value={sort}
+                  >
+                    <ListItemText primary={sort} />
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </div>
+        </div>
         <div className="grid xl:grid-cols-3 md:grid-cols-2 xs:grid-cols-1">
         {loading &&
           <LoadingButton loading variant="outlined">
@@ -73,8 +306,17 @@ const UserRecommendations = ({ search, match }) => {
           .filter((filteredRecommendation) =>
             filteredRecommendation.title.toLowerCase().includes(search.toLowerCase()) || filteredRecommendation.author.toLowerCase().includes(search.toLowerCase())
           )
+          .filter(filterRecGenre => filterRecGenre.genres.some(recs => genres.includes(recs)))
+          .filter(filterRecRating => ratings.includes(filterRecRating.rating)).length > 0 ?
+
+          recommendations
+            ?.filter((filteredRecommendation) =>
+              filteredRecommendation.title.toLowerCase().includes(search.toLowerCase()) || filteredRecommendation.author.toLowerCase().includes(search.toLowerCase())
+            )
+            .filter(filterRecGenre => filterRecGenre.genres.some(recs => genres.includes(recs)))
+            .filter(filterRecRating => ratings.includes(filterRecRating.rating))
           .map((recommendation) => (
-            <div className="pb-4">
+            <div className="pb-4 pt-4">
               <Card sx={{ maxWidth: 345 }} key={recommendation._id}>
                 <CardHeader
                   title={recommendation.title}
@@ -111,6 +353,8 @@ const UserRecommendations = ({ search, match }) => {
               </Card>
             </div>
           ))
+          :
+          <div className="pt-4 text-2xl text-center justify-center flex grid col-span-6">No recommendations found matching that criteria.</div>
         }
         </div>
       </MainScreen>
