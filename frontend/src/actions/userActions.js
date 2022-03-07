@@ -72,9 +72,7 @@ export const signup = (username, email, password, confirmPassword, pic) => async
       },
       config
     );
-
-      dispatch({ type: USER_SIGNUP_SUCCESS, payload: data });
-      dispatch({ type: USER_LOGIN_SUCCESS, payload: data });
+    dispatch({ type: USER_LOGIN_SUCCESS, payload: data });
 
       localStorage.setItem('userInfo', JSON.stringify(data));
     }

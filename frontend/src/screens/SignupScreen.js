@@ -71,8 +71,8 @@ const SignupScreen = () => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const userSignup = useSelector((state) => state.userSignup);
-  const { loading, error, userInfo } = userSignup;
+  const userLogin = useSelector((state) => state.userLogin);
+  const { loading, error, userInfo } = userLogin;
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -108,7 +108,7 @@ const SignupScreen = () => {
 
   useEffect(() => {
     if(userInfo) {
-      navigate("/");
+      navigate("/myrecommendations");
     }
   }, [navigate, userInfo]);
 

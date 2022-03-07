@@ -38,6 +38,9 @@ import { useDispatch, useSelector} from "react-redux";
 import { listRecommendations, deleteRecommendationAction } from "../actions/recommendationsActions";
 
 const MyRecommendations = ({ search }) => {
+  const userLogin = useSelector(state => state.userLogin);
+  const { userInfo } = userLogin;
+
   const genreTypes = [
   'Action/Adventure',
   'African American Literature',
@@ -183,9 +186,6 @@ const handleSortChange = (event) => {
   const recommendationList = useSelector((state) => state.recommendationList);
   const { loading, recommendations, error } = recommendationList;
 
-  const userLogin = useSelector(state => state.userLogin);
-  const { userInfo } = userLogin;
-
   const recommendationCreate = useSelector((state) => state.recommendationCreate);
   const { success: successCreate } = recommendationCreate;
 
@@ -209,7 +209,7 @@ const handleSortChange = (event) => {
     useEffect(() => {
       dispatch(listRecommendations());
       if(!userInfo)
-        navigate("/");
+        navigate("/login");
     }, [dispatch, successCreate, successUpdate, successDelete, navigate, userInfo])
 
     return (
