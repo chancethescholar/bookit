@@ -8,7 +8,14 @@ const getBookmarks = asyncHandler(async (req, res) => {
 });
 
 const addBookmark = asyncHandler(async (req, res) => {
-  const recommendation = await Recommendation.findOne({ _id: req.params.id });
+  const recommendation = await Recommendation.findById(req.params.id);
+  const bookmark = await Bookmark.findOne({recId: req.params.id, userAdd: req.user._id});
+
+  if (bookmark) {
+    res.status(400);
+    throw new Error("This recommendation has already been bookmarked")
+  }
+
   if (recommendation) {
     const { title, author, genres, review, rating, image } = recommendation;
     const userCreate = recommendation.user;
@@ -25,4 +32,17 @@ const addBookmark = asyncHandler(async (req, res) => {
   }
 })
 
-module.exports = { getBookmarks, addBookmark };
+const removeBookmark = asyncHandler(async (req, res) => {
+  const bookmark = await Bookmark.findOne({recId: req.params.id, userAdd: req.user._id});
+  if (bookmark) {
+    await bookmark.remove();
+    res.json({ message: "Bookmark removed" });
+  }
+
+  else {
+    res.status(404);
+    throw new Error("Bookmark not found");
+  }
+})
+
+module.exports = { getBookmarks, addBookmark, removeBookmark };
