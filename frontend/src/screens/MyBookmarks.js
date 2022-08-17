@@ -36,12 +36,12 @@ import { useNavigate } from "react-router-dom";
 import image from "../images/no-image.png";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  listRecommendations,
-  deleteRecommendationAction,
-} from "../actions/recommendationsActions";
+  listBookmarks,
+  deleteBookmarkAction,
+} from "../actions/bookmarksActions";
 import { genreTypes, ratingNumbers, sortTypes } from "../types";
 
-const MyRecommendations = ({ search }) => {
+const MyBookmarks = ({ search }) => {
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
@@ -90,45 +90,41 @@ const MyRecommendations = ({ search }) => {
     );
 
     if (event.target.value === "None") {
-      recommendations = recommendations.sort(function (a, b) {
+      bookmarks = bookmarks.sort(function (a, b) {
         return a.createdAt.localeCompare(b.createdAt);
       });
     }
 
     if (event.target.value === "Newest to Oldest") {
-      recommendations = recommendations.sort(function (a, b) {
+      bookmarks = bookmarks.sort(function (a, b) {
         return a.createdAt.localeCompare(b.createdAt);
       });
     }
 
     if (event.target.value === "Oldest to Newest") {
-      recommendations = recommendations.sort(function (a, b) {
+      bookmarks = bookmarks.sort(function (a, b) {
         return b.createdAt.localeCompare(a.createdAt);
       });
     }
 
     if (event.target.value === "Title (A to Z)") {
-      recommendations = recommendations.sort(function (a, b) {
+      bookmarks = bookmarks.sort(function (a, b) {
         return b.title.localeCompare(a.title);
       });
     }
 
     if (event.target.value === "Title (Z to A)") {
-      recommendations = recommendations.sort(function (a, b) {
+      bookmarks = bookmarks.sort(function (a, b) {
         return a.title.localeCompare(b.title);
       });
     }
 
     if (event.target.value === "Rating (high to low)") {
-      recommendations = recommendations.sort(
-        ({ rating: a }, { rating: b }) => a - b
-      );
+      bookmarks = bookmarks.sort(({ rating: a }, { rating: b }) => a - b);
     }
 
     if (event.target.value === "Rating (low to high)") {
-      recommendations = recommendations.sort(
-        ({ rating: a }, { rating: b }) => b - a
-      );
+      bookmarks = bookmarks.sort(({ rating: a }, { rating: b }) => b - a);
     }
   };
 
@@ -143,55 +139,37 @@ const MyRecommendations = ({ search }) => {
 
   const dispatch = useDispatch();
 
-  const recommendationList = useSelector((state) => state.recommendationList);
-  const { loading, recommendations, error } = recommendationList;
+  const bookmarkList = useSelector((state) => state.bookmarkList);
+  const { loading, bookmarks, error } = bookmarkList;
 
-  const recommendationCreate = useSelector(
-    (state) => state.recommendationCreate
-  );
-  const { success: successCreate } = recommendationCreate;
+  const bookmarkCreate = useSelector((state) => state.bookmarkCreate);
+  const { success: successCreate } = bookmarkCreate;
 
-  const recommendationUpdate = useSelector(
-    (state) => state.recommendationUpdate
-  );
-  const { success: successUpdate } = recommendationUpdate;
-
-  const recommendationDelete = useSelector(
-    (state) => state.recommendationDelete
-  );
+  const bookmarkDelete = useSelector((state) => state.bookmarkDelete);
   const {
     loading: loadingDelete,
     error: errorDelete,
     success: successDelete,
-  } = recommendationDelete;
+  } = bookmarkDelete;
 
   const deleteHandler = (id) => {
-    if (
-      window.confirm("Are you sure you want to delete this recommendation?")
-    ) {
-      dispatch(deleteRecommendationAction(id));
+    if (window.confirm("Are you sure you want to delete this bookmark?")) {
+      dispatch(deleteBookmarkAction(id));
     }
   };
 
-  //console.log(recommendations);
+  //console.log(bookmarks);
   const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(listRecommendations());
+    dispatch(listBookmarks());
     if (!userInfo) navigate("/login");
-  }, [
-    dispatch,
-    successCreate,
-    successUpdate,
-    successDelete,
-    navigate,
-    userInfo,
-  ]);
+  }, [dispatch, successCreate, successDelete, navigate, userInfo]);
 
   return (
-    <MainScreen title={`${userInfo.username}'s Recommendations`}>
+    <MainScreen title={`${userInfo.username}'s Bookmarks`}>
       <div className="pb-4">
-        <Link to="/createrecommendation" style={{ textDecoration: "none" }}>
+        <Link to="/createbookmark" style={{ textDecoration: "none" }}>
           <Button variant="contained" size="large" endIcon={<AddRoundedIcon />}>
             New
           </Button>
@@ -314,14 +292,14 @@ const MyRecommendations = ({ search }) => {
             Loading
           </LoadingButton>
         )}
-        {recommendations
+        {bookmarks
           ?.reverse()
           .filter(
-            (filteredRecommendation) =>
-              filteredRecommendation.title
+            (filteredBookmark) =>
+              filteredBookmark.title
                 .toLowerCase()
                 .includes(search.toLowerCase()) ||
-              filteredRecommendation.author
+              filteredBookmark.author
                 .toLowerCase()
                 .includes(search.toLowerCase())
           )
@@ -330,13 +308,13 @@ const MyRecommendations = ({ search }) => {
           )
           .filter((filterRecRating) => ratings.includes(filterRecRating.rating))
           .length > 0 ? (
-          recommendations
+          bookmarks
             ?.filter(
-              (filteredRecommendation) =>
-                filteredRecommendation.title
+              (filteredBookmark) =>
+                filteredBookmark.title
                   .toLowerCase()
                   .includes(search.toLowerCase()) ||
-                filteredRecommendation.author
+                filteredBookmark.author
                   .toLowerCase()
                   .includes(search.toLowerCase())
             )
@@ -346,36 +324,36 @@ const MyRecommendations = ({ search }) => {
             .filter((filterRecRating) =>
               ratings.includes(filterRecRating.rating)
             )
-            .map((recommendation) => (
+            .map((bookmark) => (
               <div className="pb-4 pt-4">
-                <Card sx={{ maxWidth: 345 }} key={recommendation._id}>
+                <Card sx={{ maxWidth: 345 }} key={bookmark._id}>
                   <CardHeader
-                    title={recommendation.title}
-                    subheader={recommendation.author}
+                    title={bookmark.title}
+                    subheader={bookmark.author}
                     action={
                       <Tooltip
-                        title={`More recommendations from ${recommendation.userName}`}
+                        title={`More recommendations from ${bookmark.userName}`}
                       >
-                        {userInfo.username === recommendation.userName ? (
+                        {userInfo.username === bookmark.userName ? (
                           <IconButton
                             sx={{ p: 0 }}
-                            href="/myrecommendations"
+                            href="/mybookmarks"
                             aria-label="edit"
                           >
                             <Avatar
-                              alt={recommendation.userName}
-                              src={recommendation.userPic}
+                              alt={bookmark.userName}
+                              src={bookmark.userPic}
                             />
                           </IconButton>
                         ) : (
                           <IconButton
                             sx={{ p: 0 }}
-                            href={`/recommendations/view/${recommendation.userName}`}
+                            href={`/bookmarks/view/${bookmark.userName}`}
                             aria-label="edit"
                           >
                             <Avatar
-                              alt={recommendation.userName}
-                              src={recommendation.userPic}
+                              alt={bookmark.userName}
+                              src={bookmark.userPic}
                             />
                           </IconButton>
                         )}
@@ -383,19 +361,19 @@ const MyRecommendations = ({ search }) => {
                     }
                   />
 
-                  {recommendation.image !== "no image" && (
+                  {bookmark.image !== "no image" && (
                     <CardMedia
                       component="img"
                       height="194"
-                      image={recommendation.image}
-                      alt={recommendation.title}
+                      image={bookmark.image}
+                      alt={bookmark.title}
                     />
                   )}
-                  <CardContent key={recommendation._id}>
+                  <CardContent key={bookmark._id}>
                     <div className="pb-4">
-                      {recommendation.genres.map((genre) => (
+                      {bookmark.genres.map((genre) => (
                         <Chip
-                          key={recommendation._id + genre}
+                          key={bookmark._id + genre}
                           variant="outlined"
                           color="primary"
                           label={genre}
@@ -403,11 +381,11 @@ const MyRecommendations = ({ search }) => {
                       ))}
                     </div>
                     <Typography paragraph className="px-2">
-                      {recommendation.review}
+                      {bookmark.review}
                     </Typography>
                     <StyledRating
                       name="rating"
-                      defaultValue={recommendation.rating}
+                      defaultValue={bookmark.rating}
                       getLabelText={(value) =>
                         `${value} Book${value !== 1 ? "s" : ""}`
                       }
@@ -419,27 +397,27 @@ const MyRecommendations = ({ search }) => {
                     />
                   </CardContent>
                   <CardActions disableSpacing>
-                    {userInfo._id === recommendation.user ? (
+                    {userInfo._id === bookmark.user ? (
                       <div>
                         <IconButton
-                          href={`/recommendation/${recommendation._id}`}
+                          href={`/bookmark/${bookmark._id}`}
                           aria-label="edit"
                         >
                           <EditRoundedIcon />
                         </IconButton>
                         <IconButton
-                          onClick={() => deleteHandler(recommendation._id)}
+                          onClick={() => deleteHandler(bookmark._id)}
                           aria-label="delete"
                         >
                           <DeleteRoundedIcon />
                         </IconButton>
                         <span className="text-xs pl-24">
-                          Created {recommendation.createdAt.substring(0, 10)}
+                          Created {bookmark.createdAt.substring(0, 10)}
                         </span>
                       </div>
                     ) : (
                       <div className="text-xs pl-44">
-                        Created {recommendation.createdAt.substring(0, 10)}
+                        Created {bookmark.createdAt.substring(0, 10)}
                       </div>
                     )}
                   </CardActions>
@@ -448,7 +426,7 @@ const MyRecommendations = ({ search }) => {
             ))
         ) : (
           <div className="pt-4 text-2xl text-center justify-center flex grid col-span-6">
-            No recommendations found matching that criteria.
+            No bookmarks found matching that criteria.
           </div>
         )}
       </div>
@@ -456,4 +434,4 @@ const MyRecommendations = ({ search }) => {
   );
 };
 
-export default MyRecommendations;
+export default MyBookmarks;
