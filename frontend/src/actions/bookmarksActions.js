@@ -9,9 +9,6 @@ import {
   BOOKMARKS_DELETE_REQUEST,
   BOOKMARKS_DELETE_SUCCESS,
   BOOKMARKS_DELETE_FAIL,
-  BOOKMARKS_USER_REQUEST,
-  BOOKMARKS_USER_SUCCESS,
-  BOOKMARKS_USER_FAIL,
 } from "../constants/bookmarksConstants";
 
 export const listBookmarks = () => async (dispatch, getState) => {
@@ -30,7 +27,7 @@ export const listBookmarks = () => async (dispatch, getState) => {
       },
     };
 
-    const { data } = await axios.get(`/api/BOOKMARKS`, config);
+    const { data } = await axios.get(`/api/bookmarks`, config);
 
     dispatch({
       type: BOOKMARKS_LIST_SUCCESS,
@@ -68,7 +65,7 @@ export const createBookmarkAction =
       };
 
       const { data } = await axios.post(
-        `/api/BOOKMARKS/create`,
+        `/api/bookmarks/add`,
         { title, author, genres, review, rating, image },
         config
       );
@@ -106,7 +103,7 @@ export const deleteBookmarkAction = (id) => async (dispatch, getState) => {
       },
     };
 
-    const { data } = await axios.delete(`/api/BOOKMARKS/${id}`, config);
+    const { data } = await axios.delete(`/api/bookmarks/remove/${id}`, config);
 
     dispatch({
       type: BOOKMARKS_DELETE_SUCCESS,
@@ -119,41 +116,6 @@ export const deleteBookmarkAction = (id) => async (dispatch, getState) => {
         : error.message;
     dispatch({
       type: BOOKMARKS_DELETE_FAIL,
-      payload: message,
-    });
-  }
-};
-
-export const userBookmarksAction = (username) => async (dispatch, getState) => {
-  try {
-    dispatch({
-      type: BOOKMARKS_USER_REQUEST,
-    });
-
-    const {
-      userLogin: { userInfo },
-    } = getState();
-
-    const config = {
-      headers: {
-        "Content-type": "application/json",
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-    };
-
-    const { data } = await axios.get(`/api/BOOKMARKS/view/${username}`, config);
-
-    dispatch({
-      type: BOOKMARKS_USER_SUCCESS,
-      payload: data,
-    });
-  } catch (error) {
-    const message =
-      error.response && error.response.data.message
-        ? error.response.data.message
-        : error.message;
-    dispatch({
-      type: BOOKMARKS_USER_FAIL,
       payload: message,
     });
   }

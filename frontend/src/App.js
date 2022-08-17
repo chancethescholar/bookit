@@ -73,7 +73,7 @@ const App = () => {
             exact
           />
           <Route
-            path="/bookmarks/view/:username"
+            path="/mybookmarks"
             element={<MyBookmarks search={search} />}
             exact
           />

@@ -18,7 +18,6 @@ import {
   bookmarkListReducer,
   bookmarkCreateReducer,
   bookmarkDeleteReducer,
-  bookmarkUserReducer,
 } from "./reducers/bookmarksReducers";
 
 const reducer = combineReducers({
@@ -34,7 +33,6 @@ const reducer = combineReducers({
   bookmarkList: bookmarkListReducer,
   bookmarkCreate: bookmarkCreateReducer,
   bookmarkDelete: bookmarkDeleteReducer,
-  bookmarkUser: bookmarkUserReducer,
 });
 
 const userInfoFromStorage = localStorage.getItem("userInfo")
