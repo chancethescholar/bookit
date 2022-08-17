@@ -192,7 +192,11 @@ const MyRecommendations = ({ search }) => {
     <MainScreen title={`${userInfo.username}'s Recommendations`}>
       <div className="pb-4">
         <Link to="/createrecommendation" style={{ textDecoration: "none" }}>
-          <Button variant="contained" size="large" endIcon={<AddRoundedIcon />}>
+          <Button
+            variant="contained"
+            size="large"
+            startIcon={<AddRoundedIcon />}
+          >
             New
           </Button>
         </Link>

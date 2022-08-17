@@ -46,7 +46,7 @@ export const listBookmarks = () => async (dispatch, getState) => {
 };
 
 export const createBookmarkAction =
-  (title, author, genres, review, rating, image) =>
+  (id, title, author, genres, review, rating, image) =>
   async (dispatch, getState) => {
     try {
       dispatch({
@@ -65,7 +65,7 @@ export const createBookmarkAction =
       };
 
       const { data } = await axios.post(
-        `/api/bookmarks/add`,
+        `/api/bookmarks/add/${id}`,
         { title, author, genres, review, rating, image },
         config
       );
