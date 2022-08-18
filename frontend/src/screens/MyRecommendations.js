@@ -33,7 +33,6 @@ import MenuItem from "@mui/material/MenuItem";
 import Checkbox from "@mui/material/Checkbox";
 import ListItemText from "@mui/material/ListItemText";
 import { useNavigate } from "react-router-dom";
-import image from "../images/no-image.png";
 import { useDispatch, useSelector } from "react-redux";
 import {
   listRecommendations,
@@ -49,7 +48,6 @@ const MyRecommendations = ({ search }) => {
   const [genreType, setGenreType] = useState([]);
   const [ratings, setRatings] = useState(ratingNumbers);
   const [ratingNumber, setRatingNumber] = useState([]);
-  const [sort, setSort] = useState(genreTypes);
   const [sortType, setSortType] = useState([]);
 
   const handleGenreChange = (event) => {

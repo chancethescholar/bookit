@@ -39,6 +39,7 @@ import {
   listAllRecommendations,
 } from "../actions/recommendationsActions";
 import {
+  listBookmarks,
   createBookmarkAction,
   deleteBookmarkAction,
 } from "../actions/bookmarksActions";
@@ -85,7 +86,6 @@ const BrowseRecommendations = ({ search }) => {
   const [genreType, setGenreType] = useState([]);
   const [ratings, setRatings] = useState(ratingNumbers);
   const [ratingNumber, setRatingNumber] = useState([]);
-  const [sort, setSort] = useState(genreTypes);
   const [sortType, setSortType] = useState([]);
   const [bookmarked, setBookmarked] = useState(false);
 
@@ -195,6 +195,9 @@ const BrowseRecommendations = ({ search }) => {
     success: successDelete,
   } = recommendationDelete;
 
+  const bookmarkList = useSelector((state) => state.bookmarkList);
+  const { bookmarksLoading, bookmarks, bookmarksError } = bookmarkList;
+
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
@@ -213,6 +216,8 @@ const BrowseRecommendations = ({ search }) => {
       dispatch(deleteRecommendationAction(id));
     }
   };
+
+  const unbookmarkHandler = (id) => {};
 
   const bookmarkHandler = (
     id,
@@ -435,35 +440,32 @@ const BrowseRecommendations = ({ search }) => {
                       </Tooltip>
                     }
                     action={
-                      <Tooltip title="bookmark this recommendation">
-                        <IconButton
-                          size="small"
-                          onClick={() =>
-                            bookmarkHandler(
-                              recommendation._id,
-                              recommendation.title,
-                              recommendation.author,
-                              recommendation.genres,
-                              recommendation.review,
-                              recommendation.rating,
-                              recommendation.image
-                            )
-                          }
-                        >
-                          {!bookmarked && (
-                            <img
-                              src={unbookmarkedImg}
-                              style={{ width: 50, height: 40 }}
-                            />
-                          )}
-                          {bookmarked && (
-                            <img
-                              src={bookmarkedImg}
-                              style={{ width: 50, height: 40 }}
-                            />
-                          )}
-                        </IconButton>
-                      </Tooltip>
+                      <>
+                        {bookmarks?.some(
+                          (bookmark) => bookmark.recId === recommendation._id
+                        ) && (
+                          <Tooltip title="remove bookmark from this recommendation">
+                            <IconButton size="small">
+                              <img
+                                src={bookmarkedImg}
+                                style={{ width: 50, height: 40 }}
+                              />
+                            </IconButton>
+                          </Tooltip>
+                        )}
+                        {!bookmarks?.some(
+                          (bookmark) => bookmark.recId === recommendation._id
+                        ) && (
+                          <Tooltip title="bookmark this recommendation">
+                            <IconButton size="small">
+                              <img
+                                src={unbookmarkedImg}
+                                style={{ width: 50, height: 40 }}
+                              />
+                            </IconButton>
+                          </Tooltip>
+                        )}
+                      </>
                     }
                   />
 

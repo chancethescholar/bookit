@@ -10,12 +10,12 @@ import {
   BOOKMARKS_DELETE_FAIL,
 } from "../constants/bookmarksConstants";
 
-export const bookmarkListReducer = (state = { BOOKMARKS: [] }, action) => {
+export const bookmarkListReducer = (state = { bookmarks: [] }, action) => {
   switch (action.type) {
     case BOOKMARKS_LIST_REQUEST:
       return { loading: true };
     case BOOKMARKS_LIST_SUCCESS:
-      return { loading: false, BOOKMARKS: action.payload };
+      return { loading: false, bookmarks: action.payload };
     case BOOKMARKS_LIST_FAIL:
       return { loading: false, error: action.payload };
 

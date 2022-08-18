@@ -1,10 +1,7 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { styled } from "@mui/material/styles";
-import { Link } from "react-router-dom";
 import MainScreen from "../components/MainScreen";
-import Button from "@mui/material/Button";
-import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardActions from "@mui/material/CardActions";
@@ -33,7 +30,6 @@ import MenuItem from "@mui/material/MenuItem";
 import Checkbox from "@mui/material/Checkbox";
 import ListItemText from "@mui/material/ListItemText";
 import { useNavigate } from "react-router-dom";
-import image from "../images/no-image.png";
 import { useDispatch, useSelector } from "react-redux";
 import {
   listBookmarks,
@@ -49,7 +45,6 @@ const MyBookmarks = ({ search }) => {
   const [genreType, setGenreType] = useState([]);
   const [ratings, setRatings] = useState(ratingNumbers);
   const [ratingNumber, setRatingNumber] = useState([]);
-  const [sort, setSort] = useState(genreTypes);
   const [sortType, setSortType] = useState([]);
 
   const handleGenreChange = (event) => {
@@ -142,6 +137,8 @@ const MyBookmarks = ({ search }) => {
   const bookmarkList = useSelector((state) => state.bookmarkList);
   const { loading, bookmarks, error } = bookmarkList;
 
+  console.log(bookmarks);
+
   const bookmarkCreate = useSelector((state) => state.bookmarkCreate);
   const { success: successCreate } = bookmarkCreate;
 
@@ -164,17 +161,10 @@ const MyBookmarks = ({ search }) => {
   useEffect(() => {
     dispatch(listBookmarks());
     if (!userInfo) navigate("/login");
-  }, [dispatch, successCreate, successDelete, navigate, userInfo]);
+  }, [dispatch, successCreate, navigate, userInfo]);
 
   return (
     <MainScreen title={`${userInfo.username}'s Bookmarks`}>
-      <div className="pb-4">
-        <Link to="/createbookmark" style={{ textDecoration: "none" }}>
-          <Button variant="contained" size="large" endIcon={<AddRoundedIcon />}>
-            New
-          </Button>
-        </Link>
-      </div>
       <div className="pb-4 flex grid grid-cols-8">
         <div className="pt-3">
           <FilterAltRoundedIcon />
