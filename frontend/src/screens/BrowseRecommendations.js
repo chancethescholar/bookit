@@ -87,7 +87,6 @@ const BrowseRecommendations = ({ search }) => {
   const [ratings, setRatings] = useState(ratingNumbers);
   const [ratingNumber, setRatingNumber] = useState([]);
   const [sortType, setSortType] = useState([]);
-  const [bookmarked, setBookmarked] = useState(false);
 
   const handleGenreChange = (event) => {
     const {
@@ -217,7 +216,9 @@ const BrowseRecommendations = ({ search }) => {
     }
   };
 
-  const unbookmarkHandler = (id) => {};
+  const unbookmarkHandler = (recId) => {
+    dispatch(deleteBookmarkAction(recId));
+  };
 
   const bookmarkHandler = (
     id,
@@ -228,15 +229,9 @@ const BrowseRecommendations = ({ search }) => {
     rating,
     image
   ) => {
-    if (!bookmarked) {
-      dispatch(
-        createBookmarkAction(id, title, author, genres, review, rating, image)
-      );
-      setBookmarked(true);
-    } else if (bookmarked) {
-      dispatch(deleteBookmarkAction(id));
-      setBookmarked(false);
-    }
+    dispatch(
+      createBookmarkAction(id, title, author, genres, review, rating, image)
+    );
   };
 
   return (
@@ -449,10 +444,14 @@ const BrowseRecommendations = ({ search }) => {
                               <img
                                 src={bookmarkedImg}
                                 style={{ width: 50, height: 40 }}
+                                onClick={() =>
+                                  unbookmarkHandler(recommendation._id)
+                                }
                               />
                             </IconButton>
                           </Tooltip>
                         )}
+
                         {!bookmarks?.some(
                           (bookmark) => bookmark.recId === recommendation._id
                         ) && (
@@ -461,6 +460,17 @@ const BrowseRecommendations = ({ search }) => {
                               <img
                                 src={unbookmarkedImg}
                                 style={{ width: 50, height: 40 }}
+                                onClick={() =>
+                                  bookmarkHandler(
+                                    recommendation._id,
+                                    recommendation.title,
+                                    recommendation.author,
+                                    recommendation.genres,
+                                    recommendation.review,
+                                    recommendation.rating,
+                                    recommendation.image
+                                  )
+                                }
                               />
                             </IconButton>
                           </Tooltip>
