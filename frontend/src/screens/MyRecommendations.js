@@ -38,7 +38,14 @@ import {
   listRecommendations,
   deleteRecommendationAction,
 } from "../actions/recommendationsActions";
+import {
+  listBookmarks,
+  createBookmarkAction,
+  deleteBookmarkAction,
+} from "../actions/bookmarksActions";
 import { genreTypes, ratingNumbers, sortTypes } from "../types";
+import unbookmarkedImg from "../images/unbookmarked.png";
+import bookmarkedImg from "../images/bookmarked.png";
 
 const MyRecommendations = ({ search }) => {
   const userLogin = useSelector((state) => state.userLogin);
@@ -163,6 +170,27 @@ const MyRecommendations = ({ search }) => {
     success: successDelete,
   } = recommendationDelete;
 
+  const bookmarkList = useSelector((state) => state.bookmarkList);
+  const { bookmarksLoading, bookmarks, bookmarksError } = bookmarkList;
+
+  const unbookmarkHandler = (recId) => {
+    dispatch(deleteBookmarkAction(recId));
+  };
+
+  const bookmarkHandler = (
+    id,
+    title,
+    author,
+    genres,
+    review,
+    rating,
+    image
+  ) => {
+    dispatch(
+      createBookmarkAction(id, title, author, genres, review, rating, image)
+    );
+  };
+
   const deleteHandler = (id) => {
     if (
       window.confirm("Are you sure you want to delete this recommendation?")
@@ -176,6 +204,7 @@ const MyRecommendations = ({ search }) => {
 
   useEffect(() => {
     dispatch(listRecommendations());
+    dispatch(listBookmarks());
     if (!userInfo) navigate("/login");
   }, [
     dispatch,
@@ -354,7 +383,7 @@ const MyRecommendations = ({ search }) => {
                   <CardHeader
                     title={recommendation.title}
                     subheader={recommendation.author}
-                    action={
+                    avatar={
                       <Tooltip
                         title={`More recommendations from ${recommendation.userName}`}
                       >
@@ -382,6 +411,49 @@ const MyRecommendations = ({ search }) => {
                           </IconButton>
                         )}
                       </Tooltip>
+                    }
+                    action={
+                      <>
+                        {bookmarks?.some(
+                          (bookmark) => bookmark.recId === recommendation._id
+                        ) && (
+                          <Tooltip title="remove bookmark from this recommendation">
+                            <IconButton size="small">
+                              <img
+                                src={bookmarkedImg}
+                                style={{ width: 50, height: 40 }}
+                                onClick={() =>
+                                  unbookmarkHandler(recommendation._id)
+                                }
+                              />
+                            </IconButton>
+                          </Tooltip>
+                        )}
+
+                        {!bookmarks?.some(
+                          (bookmark) => bookmark.recId === recommendation._id
+                        ) && (
+                          <Tooltip title="bookmark this recommendation">
+                            <IconButton size="small">
+                              <img
+                                src={unbookmarkedImg}
+                                style={{ width: 50, height: 40 }}
+                                onClick={() =>
+                                  bookmarkHandler(
+                                    recommendation._id,
+                                    recommendation.title,
+                                    recommendation.author,
+                                    recommendation.genres,
+                                    recommendation.review,
+                                    recommendation.rating,
+                                    recommendation.image
+                                  )
+                                }
+                              />
+                            </IconButton>
+                          </Tooltip>
+                        )}
+                      </>
                     }
                   />
 

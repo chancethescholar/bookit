@@ -205,6 +205,7 @@ const BrowseRecommendations = ({ search }) => {
 
   useEffect(() => {
     dispatch(listAllRecommendations());
+    dispatch(listBookmarks());
     if (!userInfo) navigate("/");
   }, [dispatch, successDelete, navigate, userInfo]);
 
