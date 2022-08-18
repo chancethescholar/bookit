@@ -36,6 +36,7 @@ import {
   deleteBookmarkAction,
 } from "../actions/bookmarksActions";
 import { genreTypes, ratingNumbers, sortTypes } from "../types";
+import bookmarkedImg from "../images/bookmarked.png";
 
 const MyBookmarks = ({ search }) => {
   const userLogin = useSelector((state) => state.userLogin);
@@ -153,6 +154,10 @@ const MyBookmarks = ({ search }) => {
     if (window.confirm("Are you sure you want to delete this bookmark?")) {
       dispatch(deleteBookmarkAction(id));
     }
+  };
+
+  const unbookmarkHandler = (recId) => {
+    dispatch(deleteBookmarkAction(recId));
   };
 
   //console.log(bookmarks);
@@ -320,7 +325,7 @@ const MyBookmarks = ({ search }) => {
                   <CardHeader
                     title={bookmark.title}
                     subheader={bookmark.author}
-                    action={
+                    avatar={
                       <Tooltip
                         title={`More recommendations from ${bookmark.userName}`}
                       >
@@ -348,6 +353,19 @@ const MyBookmarks = ({ search }) => {
                           </IconButton>
                         )}
                       </Tooltip>
+                    }
+                    action={
+                      <>
+                        <Tooltip title="remove bookmark from this recommendation">
+                          <IconButton size="small">
+                            <img
+                              src={bookmarkedImg}
+                              style={{ width: 50, height: 40 }}
+                              onClick={() => unbookmarkHandler(bookmark.recId)}
+                            />
+                          </IconButton>
+                        </Tooltip>
+                      </>
                     }
                   />
 
