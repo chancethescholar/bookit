@@ -153,11 +153,19 @@ const MyBookmarks = ({ search }) => {
   const deleteHandler = (id) => {
     if (window.confirm("Are you sure you want to delete this bookmark?")) {
       dispatch(deleteBookmarkAction(id));
+      window.location.reload(true);
     }
   };
 
   const unbookmarkHandler = (recId) => {
-    dispatch(deleteBookmarkAction(recId));
+    if (
+      window.confirm(
+        "Are you sure you want to remove this recommendation from your bookmarks?"
+      )
+    ) {
+      dispatch(deleteBookmarkAction(recId));
+      window.location.reload(true);
+    }
   };
 
   //console.log(bookmarks);
@@ -329,15 +337,15 @@ const MyBookmarks = ({ search }) => {
                       <Tooltip
                         title={`More recommendations from ${bookmark.userName}`}
                       >
-                        {userInfo.username === bookmark.userName ? (
+                        {userInfo.username === bookmark.userCreateName ? (
                           <IconButton
                             sx={{ p: 0 }}
                             href="/mybookmarks"
                             aria-label="edit"
                           >
                             <Avatar
-                              alt={bookmark.userName}
-                              src={bookmark.userPic}
+                              alt={bookmark.userCreateName}
+                              src={bookmark.userCreatePic}
                             />
                           </IconButton>
                         ) : (
@@ -347,8 +355,8 @@ const MyBookmarks = ({ search }) => {
                             aria-label="edit"
                           >
                             <Avatar
-                              alt={bookmark.userName}
-                              src={bookmark.userPic}
+                              alt={bookmark.userCreateName}
+                              src={bookmark.userCreatePic}
                             />
                           </IconButton>
                         )}
@@ -405,7 +413,7 @@ const MyBookmarks = ({ search }) => {
                     />
                   </CardContent>
                   <CardActions disableSpacing>
-                    {userInfo._id === bookmark.user ? (
+                    {userInfo._id === bookmark.userAdd ? (
                       <div>
                         <IconButton
                           href={`/bookmark/${bookmark._id}`}

@@ -214,11 +214,19 @@ const BrowseRecommendations = ({ search }) => {
       window.confirm("Are you sure you want to delete this recommendation?")
     ) {
       dispatch(deleteRecommendationAction(id));
+      window.location.reload(true);
     }
   };
 
   const unbookmarkHandler = (recId) => {
-    dispatch(deleteBookmarkAction(recId));
+    if (
+      window.confirm(
+        "Are you sure you want to remove this recommendation from your bookmarks?"
+      )
+    ) {
+      dispatch(deleteBookmarkAction(recId));
+      window.location.reload(true);
+    }
   };
 
   const bookmarkHandler = (
@@ -233,6 +241,7 @@ const BrowseRecommendations = ({ search }) => {
     dispatch(
       createBookmarkAction(id, title, author, genres, review, rating, image)
     );
+    window.location.reload(true);
   };
 
   return (
@@ -405,11 +414,11 @@ const BrowseRecommendations = ({ search }) => {
                     title={recommendation.title}
                     subheader={recommendation.author}
                     avatar={
-                      <Tooltip
-                        title={`More recommendations from ${recommendation.userName}`}
-                      >
-                        <>
-                          {userInfo.username === recommendation.userName ? (
+                      <>
+                        {userInfo.username === recommendation.userName ? (
+                          <Tooltip
+                            title={`More recommendations from ${recommendation.userName}`}
+                          >
                             <IconButton
                               sx={{ p: 0 }}
                               href="/myrecommendations"
@@ -420,7 +429,11 @@ const BrowseRecommendations = ({ search }) => {
                                 src={recommendation.userPic}
                               />
                             </IconButton>
-                          ) : (
+                          </Tooltip>
+                        ) : (
+                          <Tooltip
+                            title={`More recommendations from ${recommendation.userName}`}
+                          >
                             <IconButton
                               sx={{ p: 0 }}
                               href={`/recommendations/view/${recommendation.userName}`}
@@ -431,9 +444,9 @@ const BrowseRecommendations = ({ search }) => {
                                 src={recommendation.userPic}
                               />
                             </IconButton>
-                          )}
-                        </>
-                      </Tooltip>
+                          </Tooltip>
+                        )}
+                      </>
                     }
                     action={
                       <>

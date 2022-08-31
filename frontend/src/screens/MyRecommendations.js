@@ -174,7 +174,14 @@ const MyRecommendations = ({ search }) => {
   const { bookmarksLoading, bookmarks, bookmarksError } = bookmarkList;
 
   const unbookmarkHandler = (recId) => {
-    dispatch(deleteBookmarkAction(recId));
+    if (
+      window.confirm(
+        "Are you sure you want to remove this recommendation from your bookmarks?"
+      )
+    ) {
+      dispatch(deleteBookmarkAction(recId));
+      window.location.reload(true);
+    }
   };
 
   const bookmarkHandler = (
@@ -189,6 +196,7 @@ const MyRecommendations = ({ search }) => {
     dispatch(
       createBookmarkAction(id, title, author, genres, review, rating, image)
     );
+    window.location.reload(true);
   };
 
   const deleteHandler = (id) => {
@@ -196,6 +204,7 @@ const MyRecommendations = ({ search }) => {
       window.confirm("Are you sure you want to delete this recommendation?")
     ) {
       dispatch(deleteRecommendationAction(id));
+      window.location.reload(true);
     }
   };
 
