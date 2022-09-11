@@ -351,7 +351,7 @@ const MyBookmarks = ({ search }) => {
                         ) : (
                           <IconButton
                             sx={{ p: 0 }}
-                            href={`/bookmarks/view/${bookmark.userName}`}
+                            href={`/recommendations/view/${bookmark.userName}`}
                             aria-label="edit"
                           >
                             <Avatar
@@ -416,7 +416,7 @@ const MyBookmarks = ({ search }) => {
                     {userInfo._id === bookmark.userAdd ? (
                       <div>
                         <IconButton
-                          href={`/bookmark/${bookmark._id}`}
+                          href={`/recommendation/${bookmark._id}`}
                           aria-label="edit"
                         >
                           <EditRoundedIcon />
